@@ -1,0 +1,312 @@
+{
+    "drivers": [
+        {
+            "location": {
+                "latitude": 35.701296,
+                "longitude": 51.391282,
+                "bearing": 270.3427
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 42759329,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7004827,
+                "longitude": 51.3911881,
+                "bearing": 156.04593
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 104526867,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7005869,
+                "longitude": 51.3905118,
+                "bearing": 270.00015
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 9287791,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7007259,
+                "longitude": 51.3903072,
+                "bearing": 0
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 61418589,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.701978,
+                "longitude": 51.391046,
+                "bearing": 0
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 10773833,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7027913,
+                "longitude": 51.3902204,
+                "bearing": 84.97057
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 36993933,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7013637,
+                "longitude": 51.393628,
+                "bearing": 223.88304
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 75320503,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.700936,
+                "longitude": 51.388332,
+                "bearing": 272.99597
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 101291615,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.701092,
+                "longitude": 51.394031,
+                "bearing": 269.00308
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 101385313,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.703422,
+                "longitude": 51.39111,
+                "bearing": 84.71475
+            },
+            "available": true,
+            "serviceCategoryType": "BIKE_DELIVERY",
+            "id": 105468401,
+            "vehicleType": "MOTORCYCLE"
+        },
+        {
+            "location": {
+                "latitude": 35.698929,
+                "longitude": 51.389289,
+                "bearing": 257.9978
+            },
+            "available": true,
+            "serviceCategoryType": "BIKE_DELIVERY",
+            "id": 46100921,
+            "vehicleType": "MOTORCYCLE"
+        },
+        {
+            "location": {
+                "latitude": 35.7034698,
+                "longitude": 51.3909595,
+                "bearing": 79.06895
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 12706039,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.702777,
+                "longitude": 51.388959,
+                "bearing": 0
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 97719271,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.6981036,
+                "longitude": 51.3915352,
+                "bearing": 174.96944
+            },
+            "available": true,
+            "serviceCategoryType": "BIKE_DELIVERY",
+            "id": 24370981,
+            "vehicleType": "MOTORCYCLE"
+        },
+        {
+            "location": {
+                "latitude": 35.698088,
+                "longitude": 51.391523,
+                "bearing": 168.73419
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 103244267,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.698599,
+                "longitude": 51.388966,
+                "bearing": 331.4898715165526
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 34472895,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.703395,
+                "longitude": 51.393219,
+                "bearing": 159.85606
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 1684107,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7006341,
+                "longitude": 51.3874006,
+                "bearing": 353.8679
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 104258049,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.69773,
+                "longitude": 51.391571,
+                "bearing": 173.89157
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 107863,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7044401,
+                "longitude": 51.3906542,
+                "bearing": 352.28064
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 9178307,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.697699,
+                "longitude": 51.389301,
+                "bearing": 91.92355
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 105678239,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7005079,
+                "longitude": 51.3961574,
+                "bearing": 238.53734
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 5351459,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.704887,
+                "longitude": 51.392567,
+                "bearing": 161.17331
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 18880451,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7009896,
+                "longitude": 51.3962855,
+                "bearing": 87.06872
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 535457,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.7026341,
+                "longitude": 51.3864072,
+                "bearing": 82.061226
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 4260071,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.702595,
+                "longitude": 51.386189,
+                "bearing": 0
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 18455771,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.70524,
+                "longitude": 51.392413,
+                "bearing": 156.05281
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 104817319,
+            "vehicleType": "CAR"
+        },
+        {
+            "location": {
+                "latitude": 35.699233,
+                "longitude": 51.396242,
+                "bearing": 268.99982
+            },
+            "available": true,
+            "serviceCategoryType": "NORMAL",
+            "id": 25278979,
+            "vehicleType": "CAR"
+        }
+    ]
+}

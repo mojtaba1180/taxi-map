@@ -1,0 +1,39 @@
+.marker{
+  width: 38px;
+    height: auto;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    -webkit-transform: translate(-50%, calc(-100% + 1px));
+    -ms-transform: translate(-50%, calc(-100% + 1px));
+    transform: translate(-50%, calc(-100% + 1px));
+    z-index: 0;
+    -webkit-transition: margin-top .2s ease-in-out;
+    -o-transition: margin-top .2s ease-in-out;
+    transition: margin-top .2s ease-in-out;
+    -webkit-animation: marker-fade-in .7s 1 ease;
+    animation: marker-fade-in .7s 1 ease;
+}
+.marker.drag
+{
+  margin-top: -30px;
+}
+.bottom-marker{
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    -webkit-transform: translate(-50%, calc(-50% + 2px));
+    -ms-transform: translate(-50%, calc(-50% + 2px));
+    transform: translate(-50%, calc(-50% + 2px));
+    z-index: 0;
+    -webkit-transition: width .2s ease-in-out;
+    -o-transition: width .2s ease-in-out;
+    transition: width .2s ease-in-out;
+}
+.bottom-marker.drag
+{
+ width: 18px;
+ height: 18px;
+}

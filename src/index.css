@@ -1,0 +1,33 @@
+
+body{
+   margin: 0;
+    padding: 0;
+    height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-touch-callout: none;
+    -ms-scroll-snap-coordinate: 0 0;
+    scroll-snap-coordinate: 0 0;
+    -ms-scroll-snap-type: mandatory;
+    scroll-snap-type: mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    font-family: dana,sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+    position: fixed !important;
+    overscroll-behavior-x: none !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: env(safe-area-inset-bottom, 5px)
+}
+#root {
+ position: relative;
+ width: 100%;
+ height: 100%;
+}
