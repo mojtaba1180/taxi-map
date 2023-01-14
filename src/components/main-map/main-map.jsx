@@ -12,23 +12,19 @@ import LocationMarker from '../location-marker/location-marker';
 import './main-map.css';
 import {
     mapCenter, selectCenter,
+    selectCoordinates,
     setDrag
 } from './mapSlice';
 const MainMap = () => {
     //redux state
     const center = useSelector(selectCenter);
+    const coordinates = useSelector(selectCoordinates);
     const dispatch = useDispatch();
     //react state
-    const [lat, setLat] = useState(35.69608886407441);
-    const [lng, setLng] = useState(51.39107607232779);
+    const [lat, setLat] = useState(0);
+    const [lng, setLng] = useState(0);
     const [isDrag, setIsDrag] = useState(false);
     const [zoom, setZoom] = useState(14);
-    const [coordinates, setCoordinates] = useState([
-        [51.39107607232779, 35.701107473830916],
-        [51.37796705867436, 35.70065872711426],
-        [51.37848204283205, 35.69689477820866],
-    ]);
-
 
     let GeoJson = {
         type: 'FeatureCollection',
@@ -57,6 +53,7 @@ const MainMap = () => {
         dispatch(setDrag(isDrag))
     }, [isDrag])
 
+
     const MapStyle = "https://tile.snappmaps.ir/styles/snapp-style/style.json"
     const tab30MapStyle = "https://tap30.services/styles/customer/style.json"
 
@@ -67,7 +64,6 @@ const MainMap = () => {
         setLat(viewState.latitude);
         setLng(viewState.longitude);
         setZoom(viewState.zoom)
-        // console.log(viewState.zoom);
     }
     const handleDragEnd = () => {
         setIsDrag(false);
