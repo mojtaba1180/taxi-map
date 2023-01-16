@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const http = axios.create({
-  baseURL: "https://api.tapsi.cab/api/v2.2",
+  baseURL: "https://map.azadiweb.ir",
 });
 
 http.interceptors.request.use(

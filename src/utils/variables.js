@@ -1,5 +1,5 @@
 // Colors
-export const GrayLight = "#eee"; 
+export const GrayLight = "#f7f7f7"; 
 export const GrayDark = "#aaa"; 
 
 
