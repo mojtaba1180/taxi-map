@@ -6,7 +6,9 @@ height: 100vh;
 position: absolute;
 z-index: 0;
 }
-
+#usemap{
+  margin-right: auto !important;
+}
 .map {
   position: absolute;
   width: 100%;

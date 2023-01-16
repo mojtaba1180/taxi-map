@@ -9,12 +9,12 @@ import LocationMarker from '../location-marker/location-marker';
 
 
 
-import './main-map.css';
 import {
     mapCenter, selectCenter,
     selectCoordinates,
     setDrag
-} from './mapSlice';
+} from '../../store/mapSlice';
+import './main-map.css';
 const MainMap = () => {
     //redux state
     const center = useSelector(selectCenter);
@@ -92,7 +92,7 @@ const MainMap = () => {
                 id="usemap"
 
                 style={{ width: "100%", height: "100vh" }}
-                mapStyle={MapStyle}
+                mapStyle={tab30MapStyle}
                 onDragStart={handleDragStart}
                 onDrag={handleDrag}
                 onDragEnd={handleDragEnd}

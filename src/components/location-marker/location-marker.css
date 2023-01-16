@@ -1,9 +1,9 @@
 .marker{
-  width: 38px;
+    width: 38px;
     height: auto;
     position: absolute;
-    top: 50vh;
-    left: 50vw;
+    top: 50%;
+    left: 50%;
     -webkit-transform: translate(-50%, calc(-100% + 1px));
     -ms-transform: translate(-50%, calc(-100% + 1px));
     transform: translate(-50%, calc(-100% + 1px));
@@ -22,8 +22,8 @@
     width: 10px;
     height: 10px;
     position: absolute;
-    top: 50vh;
-    left: 50vw;
+    top: 50%;
+    left: 50%;
     -webkit-transform: translate(-50%, calc(-50% + 2px));
     -ms-transform: translate(-50%, calc(-50% + 2px));
     transform: translate(-50%, calc(-50% + 2px));
