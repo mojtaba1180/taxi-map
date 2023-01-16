@@ -1,0 +1,20 @@
+.map-search-result-item{
+    overflow-y: auto;
+    height: 100%;
+}
+.map-search-result-item li{
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.map-search-result-item li span:nth-child(2) {
+  text-overflow: ellipsis; /* enables ellipsis */
+  white-space: nowrap; /* keeps the text in a single line */
+  overflow: hidden; 
+  padding-top: 7px;
+  width: 90%;
+  height: 30px;
+}
+.map-search-result-item li:hover{
+        background-color: #f7f7f7;
+      }
