@@ -9,6 +9,7 @@ export const MainMenuButton = styled.button`
     border-radius: ${radius_sm};
     color: #666;
     text-align: center;
+    cursor: pointer;
     svg {
         width: 30px;
         margin-bottom: -3px;
