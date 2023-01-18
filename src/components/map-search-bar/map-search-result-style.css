@@ -1,3 +1,15 @@
+.map-search-result-container{
+  transition: all .2s;
+  background: #f7f7f7;
+  border-radius: 10px;
+  overflow: hidden;
+  position: absolute;
+  top:102%;
+  right: 1.5em;
+  z-index: 4444;
+  
+}
+
 .map-search-result-item{
     overflow-y: auto;
     height: 100%;
@@ -14,7 +26,8 @@
   padding-top: 7px;
   width: 90%;
   height: 30px;
+  transition: .5s;
 }
 .map-search-result-item li:hover{
-        background-color: #f7f7f7;
+        background-color: #ffffff;
       }
