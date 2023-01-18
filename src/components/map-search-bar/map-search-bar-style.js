@@ -3,6 +3,10 @@ import { GrayDark, GrayLight, radius_lg } from '../../utils/variables';
 
 
 export const SearchBarContainer = styled.div`
+    width: 100% ;
+    display: flex;
+`;
+export const SearchBarInputBox = styled.div`
     width: 100%;
     height: 3em;
     background-color: ${GrayLight};

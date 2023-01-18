@@ -17,6 +17,9 @@ export const MapTopContainer = styled.div`
     justify-content: center;
     /* margin-top: 1em; */
     /* background-color: #ff0; */
+      @media screen and (min-width:420px){
+        max-width:420px;
+    }
 
 `;
 export const MapTopBox = styled.div`
@@ -30,10 +33,12 @@ export const MapTopBox = styled.div`
     gap: 1em;
     justify-content: start;
     align-items: center;
-    transition: all .2s;
-    height: ${props =>  props.expand ? "96vh" : "3.6em" };
+    transition: all .5s;
+
+    min-height: ${props => props.expand ? "300px": "none"};
+    height: ${props =>  props.expand ? "fit-content" : "3.6em" };
     z-index: 2;
-    overflow: hidden;
+    /* overflow: hidden; */
     @media screen and (min-width:420px){
         max-width:420px;
     }
@@ -71,6 +76,19 @@ export const MapDirectionBox = styled.div`
     }
 `; 
 
+export const  MapDirectionHeader = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p{
+        font-size: 18px;
+        font-weight: 500;
+        margin-right: -3em;
+        margin-top: 10px;
+    }
+`;
 // ############## End Directions Box  ##################
 
 
