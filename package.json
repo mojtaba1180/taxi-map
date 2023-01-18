@@ -30,6 +30,7 @@
     "react-mapbox-gl": "^5.1.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
+    "react-smooth-dnd": "^0.11.1",
     "sort-by": "^1.2.0",
     "styled-components": "^5.3.6",
     "stylis": "^4.1.3",
