@@ -17,3 +17,10 @@ export const MapDirectionAddLocation = styled.div`
     flex-direction: column;
     gap: 1em;
 `;
+export const DraggableItem = styled.div`
+    display: flex;
+    gap: 1em;
+    margin-bottom: 6px;
+    width: 85%;
+    align-items: center;
+`;

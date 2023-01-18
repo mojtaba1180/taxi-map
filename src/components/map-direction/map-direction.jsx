@@ -1,12 +1,15 @@
 import { Button, SegmentedControl } from '@mantine/core'
-import { IconCar, IconMotorbike, IconPlus, IconWalk } from '@tabler/icons'
-import React from 'react'
+import { IconArrowsDownUp, IconCar, IconMenu, IconMotorbike, IconPlus, IconTrash, IconWalk } from '@tabler/icons'
+import { AnimatePresence, motion } from "framer-motion"
+import React, { useEffect, useState } from 'react'
 import { Container, Draggable } from 'react-smooth-dnd'
 import MapSearchBar from '../map-search-bar'
-import { MapDirectionAddLocation, MapDirectionContainer } from './map-direction-style'
-
+import { applyDrag } from './../../utils/drag-and-drop/applyDrag'
+import { DraggableItem, MapDirectionAddLocation, MapDirectionContainer } from './map-direction-style'
 const MapDirection = () => {
 
+
+    const [Locations, setLocations] = useState([1, 2]);
     const directionType = [
         {
             label: (
@@ -24,7 +27,9 @@ const MapDirection = () => {
             ), value: 'walking'
         },
     ]
-    let arr = [1, 2, 3, 4, 5, 6];
+    useEffect(() => {
+        console.log(Locations);
+    }, [Locations])
     return (
         <MapDirectionContainer>
             <div style={{ height: "4em", width: "100%" }} >
@@ -35,31 +40,97 @@ const MapDirection = () => {
             </div>
             <MapDirectionAddLocation>
                 <Container
+                    lockAxis="y"
+                    onDrop={e => setLocations(applyDrag(Locations, e))}
                     dragHandleSelector=".column-drag-handle"
-                    onDrop={(e) => console.log(e)}
-                    onDragStart={(e) => { console.log(e) }}
+
                 >
                     {
-                        arr.map(item => {
+                        Locations.map((item, idx) => {
                             return (
-                                <Draggable key={item}>
-                                    <div className="draggable-item  ">
-                                        <span className="column-drag-handle" style={{ float: 'left', padding: '0 10px' }}>&#x2630;</span>
+                                <Draggable key={idx}>
+                                    <DraggableItem className="draggable-item">
+                                        {/* {item} */}
+                                        <IconMenu className="column-drag-handle" style={{ cursor: "grab" }} />
                                         <MapSearchBar />
-                                    </div>
+
+                                        {
+                                            Locations.length > 2 && idx > 1 &&
+                                            <IconTrash color='#f04'
+                                                style={{ marginLeft: "-11%" }}
+                                                onClick={() => { setLocations(Locations.filter(l => l != item)) }}
+                                            />
+                                        }
+
+                                    </DraggableItem>
                                 </Draggable>
                             )
                         })
                     }
                 </Container>
-                <Button
-                    rightIcon={<IconPlus />}
-                    style={{ alignSelf: "start" }}
+                {
+                    Locations.length <= 6 &&
+                    <Button
+                        radius={"md"}
+                        rightIcon={<IconPlus />}
+                        style={{ alignSelf: "start" }}
+                        onClick={() => {
+                            setLocations(prev => {
+                                return [
+                                    ...prev,
+                                    prev.length + 1
+                                ]
+                            })
+                        }}
+                    >
+                        افزودن مسیر جدید
+                    </Button>
+                }
+                <Motion
+                    idx={Locations.length}
                 >
-                    افزودن مسیر جدید
-                </Button>
+                    {
+                        Locations.length <= 2 &&
+                        <Button
+                            radius={'xl'}
+                            variant="subtle"
+                            onClick={() => {
+                                setLocations(applyDrag(Locations, { addedIndex: 1, removedIndex: 0 }))
+                            }}
+                            children={
+                                <IconArrowsDownUp />
+                            }
+                        />
+                    }
+                </Motion>
+
             </MapDirectionAddLocation>
         </MapDirectionContainer>
+    )
+}
+
+const Motion = ({ children, idx }) => {
+    return (
+        <AnimatePresence mode='wait'
+            key={idx}
+        >
+
+            <motion.div
+                key={idx}
+                style={{
+                    alignSelf: "start",
+                    position: "absolute",
+                    left: 0,
+                    top: "54%"
+                }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5, }}
+                transition={{ duration: 0.1 }}
+            >
+                {children}
+            </motion.div>
+        </AnimatePresence>
     )
 }
 
