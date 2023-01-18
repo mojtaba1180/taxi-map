@@ -15,7 +15,7 @@ const rtlCache = createEmotionCache({
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store} >
       <MantineProvider
         withGlobalStyles
@@ -28,5 +28,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </MapProvider>
       </MantineProvider>
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>
+  ,
 )
