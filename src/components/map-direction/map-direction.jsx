@@ -1,15 +1,18 @@
 import { Button, SegmentedControl } from '@mantine/core'
 import { IconArrowsDownUp, IconCar, IconMenu, IconMotorbike, IconPlus, IconTrash, IconWalk } from '@tabler/icons'
 import { AnimatePresence, motion } from "framer-motion"
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Container, Draggable } from 'react-smooth-dnd'
 import MapSearchBar from '../map-search-bar'
+import { selectLocations, setLocations } from './../../store/mapSlice'
 import { applyDrag } from './../../utils/drag-and-drop/applyDrag'
 import { DraggableItem, MapDirectionAddLocation, MapDirectionContainer } from './map-direction-style'
 const MapDirection = () => {
 
-
-    const [Locations, setLocations] = useState([1, 2]);
+    const dispatch = useDispatch();
+    const locations = useSelector(selectLocations)
+    console.log(locations.inputIndexSelected);
     const directionType = [
         {
             label: (
@@ -27,9 +30,7 @@ const MapDirection = () => {
             ), value: 'walking'
         },
     ]
-    useEffect(() => {
-        console.log(Locations);
-    }, [Locations])
+
     return (
         <MapDirectionContainer>
             <div style={{ height: "4em", width: "100%" }} >
@@ -41,24 +42,25 @@ const MapDirection = () => {
             <MapDirectionAddLocation>
                 <Container
                     lockAxis="y"
-                    onDrop={e => setLocations(applyDrag(Locations, e))}
+                    onDrop={e => dispatch(setLocations(applyDrag(locations.locations, e)))}
                     dragHandleSelector=".column-drag-handle"
 
                 >
                     {
-                        Locations.map((item, idx) => {
+                        locations.locations.map((item, idx) => {
+
                             return (
                                 <Draggable key={idx}>
                                     <DraggableItem className="draggable-item">
                                         {/* {item} */}
                                         <IconMenu className="column-drag-handle" style={{ cursor: "grab" }} />
-                                        <MapSearchBar />
+                                        <MapSearchBar idx={idx} />
 
                                         {
-                                            Locations.length > 2 && idx > 1 &&
+                                            locations.locations.length > 2 && idx > 1 &&
                                             <IconTrash color='#f04'
                                                 style={{ marginLeft: "-11%" }}
-                                                onClick={() => { setLocations(Locations.filter(l => l != item)) }}
+                                                onClick={() => { dispatch(setLocations(locations.locations.filter(l => l != item))) }}
                                             />
                                         }
 
@@ -69,33 +71,36 @@ const MapDirection = () => {
                     }
                 </Container>
                 {
-                    Locations.length <= 6 &&
+                    locations.locations.length <= 6 &&
                     <Button
                         radius={"md"}
                         rightIcon={<IconPlus />}
                         style={{ alignSelf: "start" }}
                         onClick={() => {
-                            setLocations(prev => {
-                                return [
-                                    ...prev,
-                                    prev.length + 1
+                            dispatch(setLocations(
+                                [
+                                    ...locations.locations,
+                                    {
+                                        value: "",
+                                        location: {}
+                                    }
                                 ]
-                            })
+                            ))
                         }}
                     >
                         افزودن مسیر جدید
                     </Button>
                 }
                 <Motion
-                    idx={Locations.length}
+                    idx={locations.locations.length}
                 >
                     {
-                        Locations.length <= 2 &&
+                        locations.locations.length <= 2 &&
                         <Button
                             radius={'xl'}
                             variant="subtle"
                             onClick={() => {
-                                setLocations(applyDrag(Locations, { addedIndex: 1, removedIndex: 0 }))
+                                dispatch(setLocations(applyDrag(locations.locations, { addedIndex: 1, removedIndex: 0 })))
                             }}
                             children={
                                 <IconArrowsDownUp />

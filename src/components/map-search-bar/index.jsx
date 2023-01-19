@@ -2,13 +2,15 @@ import { Loader } from '@mantine/core';
 import qs from 'qs';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAction, setIsDirection, setIsSearch, setOnSearch, setSearchResult } from '../../store/mapSlice';
+import { selectAction, setInputIndexSelected, setIsDirection, setIsSearch, setLocations, setOnSearch, setSearchResult } from '../../store/mapSlice';
 import http from '../../utils/http';
+import { selectLocations } from './../../store/mapSlice';
 import { DirectionButton, SearchBarContainer, SearchBarInput, SearchBarInputBox } from './map-search-bar-style';
-const MapSearchBar = ({ showDirection = false }) => {
+const MapSearchBar = (props) => {
+    const { showDirection = false } = props;
     const action = useSelector(selectAction);
+    const { locations } = useSelector(selectLocations)
     const dispatch = useDispatch();
-
     const [value, setValue] = useState("")
     const [debouncedValue, setDebouncedValue] = useState(value)
     const [Loading, setLoading] = useState(false)
@@ -17,10 +19,29 @@ const MapSearchBar = ({ showDirection = false }) => {
         return () => clearTimeout(timer)
     }, [value]);
 
+
     useEffect(() => {
         handleSearch();
     }, [debouncedValue]);
 
+    const handleSetInputValue = (e) => {
+
+        if (action.isDirection && props.idx !== undefined) {
+            let arr = [...locations]
+            arr = arr.map((item, idx) => {
+                if (props.idx === idx) {
+                    return {
+                        ...item,
+                        value: e.target.value
+                    }
+                } else {
+                    return { ...item }
+                }
+            })
+            dispatch(setLocations(arr))
+        }
+        setValue(e.target.value);
+    }
 
     const handleSearch = () => {
         const query = {
@@ -43,7 +64,6 @@ const MapSearchBar = ({ showDirection = false }) => {
         }
     }
 
-
     return (
         <div style={{ width: "100%", display: 'flex', flexDirection: "column", }} >
             <SearchBarContainer>
@@ -61,9 +81,12 @@ const MapSearchBar = ({ showDirection = false }) => {
                         }
                     </span>
                     <SearchBarInput
-                        onChange={(e) => setValue(e.target.value)}
+                        onFocus={() => {
+                            if (props.idx !== undefined || props.idx !== null) dispatch(setInputIndexSelected(props.idx))
+                        }}
+                        value={action.isDirection && locations[props.idx] ? locations[props.idx].value : value}
+                        onChange={(e) => { handleSetInputValue(e) }}
                         onKeyDown={(e) => {
-                            console.log(e.code);
                             if (e.code === "Enter" || e.code === "NumpadEnter") {
                                 handleSearch();
                             }
