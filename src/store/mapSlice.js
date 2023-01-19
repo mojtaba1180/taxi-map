@@ -24,6 +24,20 @@ const initialState = {
     },
     search:{
       searchResult:[]
+    },
+    locations:{
+      inputIndexSelected: null,
+      locations:[
+         {
+            value: "",
+            location: {}
+        }
+        ,
+        {
+            value: "",
+            location: {}
+        }
+      ] 
     }
 };
 
@@ -52,7 +66,29 @@ export const counterSlice = createSlice({
     setSearchResult: (state, action) => {
       state.search.searchResult = action.payload
     },
-    addCoordinates: () => {
+    setInputIndexSelected: (state, action) => {
+      state.locations.inputIndexSelected = action.payload
+    },
+    setLocations: (state, action) => {
+      state.locations.locations = action.payload
+    },
+    resetLocations: (state) => {
+      state.locations.locations = {
+      inputIndexSelected: null,
+      locations:[
+         {  
+            value: "",
+            location: {}
+        }
+        ,
+        {
+            value: "",
+            location: {}
+        }
+      ] 
+    }
+    },
+     addCoordinates: () => {
       
     },
     removeCoordinates: () => {
@@ -70,7 +106,10 @@ export const { mapCenter,
   setIsDirection,
   setSearchResult,
   setIsSearch,
-  setOnSearch
+  setOnSearch,
+  setInputIndexSelected,
+  setLocations,
+  resetLocations
 } = counterSlice.actions;
 
 
@@ -92,5 +131,7 @@ export const selectCoordinates = (state) => {
 export const selectSearchResult = (state) => {
     return state.mapStore.search.searchResult
 }
-
+export const selectLocations = (state) => {
+  return state.mapStore.locations
+}
 export default counterSlice.reducer;
