@@ -2,7 +2,7 @@
 import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import React, { useEffect, useState } from 'react';
-import { Layer, Map, Marker, Source } from 'react-map-gl';
+import { GeolocateControl, Map, Marker, Popup } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { drivers } from '../../json/drivers.json';
 import LocationMarker from '../location-marker/location-marker';
@@ -10,35 +10,28 @@ import LocationMarker from '../location-marker/location-marker';
 
 
 import {
-    mapCenter, selectCenter,
-    selectCoordinates,
-    setDrag
+    LocationsReady,
+    mapCenter, selectAction, selectCenter, setDrag
 } from '../../store/mapSlice';
+import { selectLocations } from './../../store/mapSlice';
+import LayerLineRoute from './layer-line-route';
 import './main-map.css';
 const MainMap = () => {
     //redux state
     const center = useSelector(selectCenter);
-    const coordinates = useSelector(selectCoordinates);
+    const {locations} = useSelector(selectLocations);
+    const locationsReady = useSelector(LocationsReady);
+    
+    const mapStyle = import.meta.env.VITE_MAP_STYLE;
+
+    const action = useSelector(selectAction);
     const dispatch = useDispatch();
     //react state
     const [lat, setLat] = useState(0);
     const [lng, setLng] = useState(0);
     const [isDrag, setIsDrag] = useState(false);
     const [zoom, setZoom] = useState(14);
-
-    let GeoJson = {
-        type: 'FeatureCollection',
-        features: [
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString',
-                    coordinates: coordinates
-                }
-            }
-        ]
-    };
-
+    const [popupInfo , setPopupInfo] = useState(null);
     //set current center 
     useEffect(() => {
         dispatch(mapCenter({
@@ -52,11 +45,6 @@ const MainMap = () => {
     useEffect(() => {
         dispatch(setDrag(isDrag))
     }, [isDrag])
-
-
-    const MapStyle = "https://tile.snappmaps.ir/styles/snapp-style/style.json"
-    const tab30MapStyle = "https://tap30.services/styles/customer/style.json"
-
     const handleDragStart = () => {
         setIsDrag(true);
     }
@@ -89,10 +77,11 @@ const MainMap = () => {
                     latitude: center.lat,
                     zoom: center.zoom
                 }}
+                onClick={(e) =>console.log(e)}
                 id="usemap"
-
+                onDblClick={(e) => console.log(e)}
                 style={{ width: "100%", height: "100vh" }}
-                mapStyle={tab30MapStyle}
+                mapStyle={mapStyle}
                 onDragStart={handleDragStart}
                 onDrag={handleDrag}
                 onDragEnd={handleDragEnd}
@@ -102,21 +91,7 @@ const MainMap = () => {
             >
 
 
-                <Source id="my-data" type="geojson" data={GeoJson}>
-                    <Layer
-                        id="lineLayer"
-                        type="line"
-                        source="my-data"
-                        layout={{
-                            "line-join": "round",
-                            "line-cap": "round"
-                        }}
-                        paint={{
-                            "line-color": "rgba(238, 3, 3, 0.5)",
-                            "line-width": 5
-                        }}
-                    />
-                </Source>
+                <LayerLineRoute/>
 
                 {
                     zoom >= 13 && drivers.map(item => {
@@ -130,7 +105,53 @@ const MainMap = () => {
                         )
                     })
                 }
-                <LocationMarker isDrag={isDrag} />
+                {
+                    locations?.map((item,idx) => {
+                        if(item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")){
+                            return (
+                                <Marker
+                                key={idx}
+                                draggable={true}
+                                children={<LocationMarker  />
+                                }
+                                 anchor="bottom"
+                                onClick={(e) => {
+                                     e.originalEvent.stopPropagation();
+                                    setPopupInfo(item)
+                                    console.log('salam');
+                                }}
+                                // onDrag={(e) => console.log(e)}
+                                latitude={item.location?.lat} longitude={item.location?.lon} />
+                            )
+                        }
+                    })
+                }
+
+                {
+                    console.log(popupInfo)
+                }
+                {
+                    popupInfo && (
+                        <Popup
+                        anchor='bottom'
+                        longitude={Number(popupInfo.location.lon)}
+                        latitude={Number(popupInfo.location.lat)}
+                        onClick={() => setPopupInfo(null)}
+                        closeOnMove={true}
+                        
+                        >
+                          <div style={{zIndex:2555}}>
+                            {popupInfo.location.display_name} 
+                          </div>
+                        </Popup>
+                    )
+                }
+                <GeolocateControl 
+                position='bottom-left'
+                />
+                {
+                    (!action.isDirection || action.isSetLocationByMarker) && <LocationMarker centerMode={true} isDrag={isDrag} />
+                }
                 {/* <NavigationControl position="top-left" /> */}
             </Map>
 

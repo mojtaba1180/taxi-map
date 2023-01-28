@@ -11,22 +11,23 @@ const initialState = {
         
       }
     },
-    coordinates:[
-        [51.39107607232779, 35.701107473830916],
-        [51.37796705867436, 35.70065872711426],
-        [51.37848204283205, 35.69689477820866],
-    ],
+    coordinates:[],
     actions:{
       isDrag: false,
       isDirection: false,
       isSearch: false, // handle search open and close
       onSearch:false, // handle search loading 
+      isSetLocationByMarker: false,
+      mobileSearch:false,
+      showSearchBar:false,
+      showDirection:true
     },
     search:{
       searchResult:[]
     },
     locations:{
       inputIndexSelected: null,
+      routedType: "car", // car , foot , bike
       locations:[
          {
             value: "",
@@ -55,6 +56,12 @@ export const counterSlice = createSlice({
     setIsSearch: (state,action) => {
       state.actions.isSearch = action.payload
     },
+    setShowDirection: (state, action) => {
+      state.actions.showDirection = action.payload
+    },
+    setShowSearchBar: (state, action) => {
+      state.actions.showSearchBar = action.payload
+    }, 
     setOnSearch: (state,action) => {
       state.actions.onSearch = action.payload
     },
@@ -72,6 +79,9 @@ export const counterSlice = createSlice({
     setLocations: (state, action) => {
       state.locations.locations = action.payload
     },
+    setLocationsRoutedType : (state, action) =>{
+      state.locations.routedType = action.payload
+    },
     resetLocations: (state) => {
       state.locations.locations = {
       inputIndexSelected: null,
@@ -88,11 +98,11 @@ export const counterSlice = createSlice({
       ] 
     }
     },
-     addCoordinates: () => {
-      
+     addCoordinates: (state,action) => {
+      state.coordinates = action.payload
     },
-    removeCoordinates: () => {
-      
+    removeCoordinates: (state) => {
+     console.log( state.coordinates.pop())
     }
   },
  
@@ -109,7 +119,10 @@ export const { mapCenter,
   setOnSearch,
   setInputIndexSelected,
   setLocations,
-  resetLocations
+  resetLocations,
+  setLocationsRoutedType,
+  setShowDirection,
+  setShowSearchBar
 } = counterSlice.actions;
 
 
@@ -133,5 +146,13 @@ export const selectSearchResult = (state) => {
 }
 export const selectLocations = (state) => {
   return state.mapStore.locations
+}
+export const LocationsReady = async (state) => {
+    let arr = []
+        await state.mapStore.locations.locations.some(v => {
+            arr.push(Object.keys(v.location).some(key => key === "lon"))
+    })
+    // console.log(arr.every(Boolean));
+    return arr.every(Boolean)
 }
 export default counterSlice.reducer;

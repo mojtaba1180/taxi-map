@@ -5,14 +5,16 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Draggable } from 'react-smooth-dnd'
 import MapSearchBar from '../map-search-bar'
-import { selectLocations, setLocations } from './../../store/mapSlice'
+import useMobileSize from './../../hooks/useMobileSize'
+import { selectLocations, setLocations, setLocationsRoutedType } from './../../store/mapSlice'
 import { applyDrag } from './../../utils/drag-and-drop/applyDrag'
 import { DraggableItem, MapDirectionAddLocation, MapDirectionContainer } from './map-direction-style'
 const MapDirection = () => {
 
     const dispatch = useDispatch();
+
+    const { isMobile } = useMobileSize();
     const locations = useSelector(selectLocations)
-    console.log(locations.inputIndexSelected);
     const directionType = [
         {
             label: (
@@ -22,21 +24,22 @@ const MapDirection = () => {
         {
             label: (
                 <IconMotorbike />
-            ), value: 'motorcycle'
+            ), value: 'bike'
         },
         {
             label: (
                 <IconWalk />
-            ), value: 'walking'
+            ), value: 'foot'
         },
     ]
-
     return (
         <MapDirectionContainer>
             <div style={{ height: "4em", width: "100%" }} >
                 <SegmentedControl
                     w={"100%"}
                     data={directionType}
+                    value={locations.routedType}
+                    onChange={(e) => dispatch(setLocationsRoutedType(e))}
                 />
             </div>
             <MapDirectionAddLocation>
@@ -71,7 +74,8 @@ const MapDirection = () => {
                     }
                 </Container>
                 {
-                    locations.locations.length <= 6 &&
+
+                    (locations.locations.length <= 6 && !isMobile()) &&
                     <Button
                         radius={"md"}
                         rightIcon={<IconPlus />}

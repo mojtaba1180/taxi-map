@@ -53,7 +53,11 @@ const MapSearchBar = (props) => {
         if (debouncedValue.length >= 3) {
             dispatch(setOnSearch(true));
             setLoading(true)
-            http.get(`/nominatim/search.php?${qs.stringify(query)}`).then(res => {
+            http.get(`/nominatim/search.php?${qs.stringify(query)}`, {
+                env: {
+                    type: "nominatim"
+                }
+            }).then(res => {
                 setLoading(false);
                 dispatch(setSearchResult(res.splice(0, 8)));
                 dispatch(setOnSearch(false));

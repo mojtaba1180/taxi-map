@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { radius_lg } from '../../utils/variables';
+import { GrayLight } from './../../utils/variables';
 
 
 // ############## Top Box  ##################
@@ -8,7 +9,7 @@ export const MapTopContainer = styled.div`
     margin: 0 auto;
     z-index: 2;
     position: absolute;
-    top:0;
+    
     right: 0;
     display:flex;
     padding: 0 10px;
@@ -17,8 +18,13 @@ export const MapTopContainer = styled.div`
     justify-content: center;
     /* margin-top: 1em; */
     /* background-color: #ff0; */
-      @media screen and (min-width:420px){
+    @media screen and (min-width:420px){
         max-width:420px;
+        top:0;
+    }
+    @media screen and (max-width:420px){
+        max-width:420px;
+        bottom:1em;
     }
 
 `;
@@ -28,15 +34,16 @@ export const MapTopBox = styled.div`
     border-radius:  ${radius_lg};
     padding: 5px;
     background-color: #fff;
+    border: 2px solid ${GrayLight};
     display: flex;
     flex-direction: column;
     gap: 1em;
     justify-content: start;
     align-items: center;
-    transition: all .5s;
+    transition: all .6s;
 
-    min-height: ${props => props.expand ? "300px": "none"};
-    height: ${props =>  props.expand ? "fit-content" : "3.6em" };
+    min-height: ${props => props.expand ? "270px": "none"};
+    height: ${props =>  props.expand ? "fit-content" : "4em" };
     z-index: 2;
     /* overflow: hidden; */
     @media screen and (min-width:420px){

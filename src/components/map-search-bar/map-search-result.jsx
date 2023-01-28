@@ -43,9 +43,6 @@ const MapSearchResult = () => {
   }
 
 
-
-
-
   if (searchResult.length === 0) {
     return (
       <>

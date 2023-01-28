@@ -1,4 +1,20 @@
+
 .marker{
+    width: 38px;
+    height: auto;
+    transform: translateY(4px);
+    z-index: 0;
+    -webkit-transition: margin-top .2s ease-in-out;
+    -o-transition: margin-top .2s ease-in-out;
+    transition: margin-top .2s ease-in-out;
+    -webkit-animation: marker-fade-in .7s 1 ease;
+    animation: marker-fade-in .7s 1 ease;
+}
+
+.marker-center.drag{
+  margin-top: -30px;
+}
+.marker-center{
     width: 38px;
     height: auto;
     position: absolute;
@@ -14,11 +30,11 @@
     -webkit-animation: marker-fade-in .7s 1 ease;
     animation: marker-fade-in .7s 1 ease;
 }
-.marker.drag
-{
+
+.marker-center.drag{
   margin-top: -30px;
 }
-.bottom-marker{
+.bottom-marker-center{
     width: 10px;
     height: 10px;
     position: absolute;
@@ -32,7 +48,7 @@
     -o-transition: width .2s ease-in-out;
     transition: width .2s ease-in-out;
 }
-.bottom-marker.drag
+.bottom-marker-center.drag
 {
  width: 18px;
  height: 18px;
