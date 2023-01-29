@@ -13,8 +13,8 @@ import {
     LocationsReady,
     mapCenter, selectAction, selectCenter, setDrag
 } from '../../store/mapSlice';
+import LayerLineRoute from '../map-direction/layer-line-route';
 import { selectLocations } from './../../store/mapSlice';
-import LayerLineRoute from './layer-line-route';
 import './main-map.css';
 const MainMap = () => {
     //redux state
@@ -125,10 +125,6 @@ const MainMap = () => {
                             )
                         }
                     })
-                }
-
-                {
-                    console.log(popupInfo)
                 }
                 {
                     popupInfo && (

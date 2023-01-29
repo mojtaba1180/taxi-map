@@ -10,6 +10,7 @@ import MapDirection from '../../components/map-direction/map-direction';
 import MapSearchBar from '../../components/map-search-bar';
 import { selectAction, setIsDirection } from '../../store/mapSlice';
 import MapSearchResult from './../../components/map-search-bar/map-search-result';
+import { selectLocations } from './../../store/mapSlice';
 import MapQuery from './map-query';
 import { MapDirectionHeader, MapTopBox, MapTopContainer } from './map-style';
 function Map() {
@@ -17,7 +18,9 @@ function Map() {
 
   
   const action = useSelector(selectAction);
+  const locations = useSelector(selectLocations);
   const dispatch = useDispatch();
+  
   const { usemap } = useMap();
   const handleGo = () => {
     // usemap.flyTo({ center: [51.420175149565466, 35.700956782132934] })
@@ -26,7 +29,8 @@ function Map() {
   }
   useLayoutEffect(() => {
     //handle query configs
-    MapQuery({search, dispatch});
+    MapQuery({search, dispatch, locations });
+    
   },[])
 
   

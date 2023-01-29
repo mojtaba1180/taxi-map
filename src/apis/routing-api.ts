@@ -6,15 +6,26 @@ interface routingEndpointProp {
     lat_lon: String,
     step: Boolean
 }
+interface nominatimReverseProp {
+    lat: Number,
+    lon: Number,
+    zoom?: Number
+}
+
+const baseEnpoint = {
+    nominatim: "nominatim"
+}
+
 
 const routingEndpoint = {
-    directionRoute: ({ routeType, lat_lon, step }: routingEndpointProp) => `/routed-${routeType}/route/v1/driving/${lat_lon}?steps=${step}&geometries=geojson`
+    directionRoute: ({ routeType, lat_lon, step }: routingEndpointProp) => `/routed-${routeType ? routeType : "car"}/route/v1/driving/${lat_lon}?steps=${step ? step : false}&geometries=geojson`,
+    nominatimReverse: ({ lat, lon, zoom }: nominatimReverseProp) => `${baseEnpoint.nominatim}/reverse.php?lat=${lat}&lon=${lon}&zoom=${zoom}8&addressdetails=1&format=json`
 };
 
 export const RoutingApi = {
-    getLocation: async () => {
+    getLocation: async ({ lat, lon, zoom }: nominatimReverseProp) => {
         try {
-            const res = await http.get("");
+            const res = await http.get(routingEndpoint.nominatimReverse({ lat, lon, zoom }));
             return { res }
         } catch (err) {
             return { err }

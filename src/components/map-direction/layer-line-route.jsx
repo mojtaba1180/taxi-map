@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Layer, Source } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
-import { RoutingApi } from './../../apis/routing-api';
-import { addCoordinates, LocationsReady, selectCoordinates, selectLocations } from './../../store/mapSlice';
+import { RoutingApi } from '../../apis/routing-api';
+import { addCoordinates, LocationsReady, selectCoordinates, selectLocations } from '../../store/mapSlice';
 const LayerLineRoute = () => {
     const coordinates = useSelector(selectCoordinates);
     const locations = useSelector(selectLocations);
@@ -18,7 +18,6 @@ const LayerLineRoute = () => {
                     const { res, err } = await RoutingApi.getRoutingDirection({
                         routeType: locations.routedType,
                         lat_lon: lat_lon.slice(";", -1),
-                        step: true
                     });
                     if (err) console.log(err);
                     if (res) {
