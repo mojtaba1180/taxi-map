@@ -1,4 +1,7 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
+*{
+  font-family:'Vazirmatn', sans-serif !important; 
+}
 body{
     direction: rtl;
     margin: 0;
@@ -13,7 +16,7 @@ body{
     scroll-snap-type: mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    font-family: dana,sans-serif;
+    font-family:'Vazirmatn', sans-serif;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -28,9 +31,13 @@ body{
     padding-bottom: env(safe-area-inset-bottom, 5px);
     background-color: #eee;
 }
+input{
+ font-family:'Vazirmatn', sans-serif !important; 
+}
 button{
     border:none;
     outline: none;
+    font-family:'Vazirmatn', sans-serif !important; 
 }
 #root {
  position: relative;

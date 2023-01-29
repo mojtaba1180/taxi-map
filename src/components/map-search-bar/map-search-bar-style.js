@@ -21,6 +21,8 @@ export const SearchBarInputBox = styled.div`
         left: 2%;
         top: 50%;
         transform: translateY(-45%);
+        background: ${GrayLight};
+        padding-right: 7px;
     }   
     svg{
         width: 25px;
@@ -38,7 +40,7 @@ export const SearchBarInput = styled.input`
     background-color: transparent;
     border-radius: ${radius_lg};
     outline: none;
-    font-size: 18px;
+    font-size: 15px;
 `;
 export const DirectionButton = styled.button`
   width: 40px;

@@ -18,7 +18,7 @@ const MapSearchResult = () => {
       return arr.map((i, idx) => {
         if (idx === index) {
           return {
-            value: `${item.address.road},${item.address.state}`,
+            value: item.display_name,
             location: item
           }
         } else {
