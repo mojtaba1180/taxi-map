@@ -2,6 +2,7 @@ import { Button, SegmentedControl } from '@mantine/core'
 import { IconArrowsDownUp, IconCar, IconMenu, IconMotorbike, IconPlus, IconTrash, IconWalk } from '@tabler/icons'
 import { AnimatePresence, motion } from "framer-motion"
 import React from 'react'
+import { useMap } from 'react-map-gl'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Draggable } from 'react-smooth-dnd'
 import MapSearchBar from '../map-search-bar'
@@ -12,7 +13,7 @@ import { DraggableItem, MapDirectionAddLocation, MapDirectionContainer } from '.
 const MapDirection = () => {
 
     const dispatch = useDispatch();
-
+    const {usemap} = useMap();
     const { isMobile } = useMobileSize();
     const locations = useSelector(selectLocations)
     const directionType = [
@@ -32,6 +33,7 @@ const MapDirection = () => {
             ), value: 'foot'
         },
     ]
+
     return (
         <MapDirectionContainer>
             <div style={{ height: "4em", width: "100%" }} >

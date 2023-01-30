@@ -1,6 +1,6 @@
 import qs from 'qs';
 import { RoutingApi } from '../../apis/routing-api';
-import { addCoordinates, setLocations, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
+import { addCoordinates, setIsDirection, setLocations, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
 const MapQuery = ({ search, dispatch }) => {
 
     const query = qs.parse(search.split("?")[1]);
@@ -34,6 +34,7 @@ const handleLoc = async (loc, dispatch) => {
     )
 
     await resultLocation.then(res => {
+        dispatch(setIsDirection(true))
         dispatch(setLocations(res));
     })
     const { res, err } = await RoutingApi.getRoutingDirection({

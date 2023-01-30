@@ -8,7 +8,6 @@ const initialState = {
       detail:{
         name:null,
         state:null,
-        
       }
     },
     coordinates:[],
@@ -20,7 +19,7 @@ const initialState = {
       isSetLocationByMarker: false,
       mobileSearch:false,
       showSearchBar:false,
-      showDirection:true
+      showDirection:true,
     },
     search:{
       searchResult:[]

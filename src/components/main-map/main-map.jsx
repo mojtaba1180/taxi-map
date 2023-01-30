@@ -2,7 +2,7 @@
 import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import React, { useEffect, useState } from 'react';
-import { GeolocateControl, Map, Marker, Popup } from 'react-map-gl';
+import { GeolocateControl, Map, Marker } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { drivers } from '../../json/drivers.json';
 import LocationMarker from '../location-marker/location-marker';
@@ -39,12 +39,14 @@ const MainMap = () => {
             lng,
             zoom
         }))
-    }, [lat, lng, zoom])
+    }, [lat, lng, zoom]);
 
     // set actions on map
     useEffect(() => {
         dispatch(setDrag(isDrag))
-    }, [isDrag])
+    }, [isDrag]);
+
+
     const handleDragStart = () => {
         setIsDrag(true);
     }
@@ -112,36 +114,16 @@ const MainMap = () => {
                                 <Marker
                                 key={idx}
                                 draggable={true}
-                                children={<LocationMarker  />
+                                children={<LocationMarker title={item.location.display_name}  />
                                 }
                                  anchor="bottom"
-                                onClick={(e) => {
-                                     e.originalEvent.stopPropagation();
-                                    setPopupInfo(item)
-                                    console.log('salam');
-                                }}
                                 // onDrag={(e) => console.log(e)}
                                 latitude={item.location?.lat} longitude={item.location?.lon} />
                             )
                         }
                     })
                 }
-                {
-                    popupInfo && (
-                        <Popup
-                        anchor='bottom'
-                        longitude={Number(popupInfo.location.lon)}
-                        latitude={Number(popupInfo.location.lat)}
-                        onClick={() => setPopupInfo(null)}
-                        closeOnMove={true}
-                        
-                        >
-                          <div style={{zIndex:2555}}>
-                            {popupInfo.location.display_name} 
-                          </div>
-                        </Popup>
-                    )
-                }
+               
                 <GeolocateControl 
                 position='bottom-left'
                 />
