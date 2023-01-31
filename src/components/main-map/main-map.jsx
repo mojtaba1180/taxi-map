@@ -3,9 +3,10 @@ import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import qs from "qs";
 import React, { useEffect, useState } from 'react';
-import { GeolocateControl, Map, Marker } from 'react-map-gl';
+import { GeolocateControl, Map, Marker, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { RoutingApi } from '../../apis/routing-api';
 import { drivers } from '../../json/drivers.json';
 import { mapCenter, selectAction, selectCenter, setDrag } from '../../store/mapSlice';
 import LocationMarker from '../location-marker/location-marker';
@@ -26,7 +27,7 @@ const MainMap = () => {
     //react state
     const [isDrag, setIsDrag] = useState(false);
     const { search } = useLocation();
-
+    const { usemap } = useMap();
 
     // ANCHOR handle center mode in search query string 
     const query = qs.parse(search.split("?")[1]);
@@ -38,10 +39,28 @@ const MainMap = () => {
     }, [isDrag]);
 
 
+    // ANCHOR Csharp function pass data to Csharp app  
+    const Cef = (action, d, z, c) => {
+        if ((typeof CefSharp) === 'undefined') return;
+        const zoom = z || usemap.getZoom();
+        const center = c || usemap.getCenter();
+        const data = d || {};
+        CefSharp.PostMessage(JSON.stringify({
+            action: action,
+            data: data,
+            zoom: zoom,
+            lat: center.lat,
+            lng: center.lng
+        }));
+    }
+
+
+
     const handleDragStart = () => {
         setIsDrag(true);
     }
     const handleDrag = ({ viewState }) => {
+        Cef('point');
         dispatch(mapCenter({
             lat: viewState.latitude,
             lng: viewState.longitude,
@@ -51,6 +70,41 @@ const MainMap = () => {
     const handleDragEnd = () => {
         setIsDrag(false);
     }
+
+    const handleClickMap = async (event) => {
+        const lng = event.lngLat.lng;
+        const lat = event.lngLat.lat;
+        const zoom = parseInt(center.zoom);
+        const { res, err } = await RoutingApi.getLocation({
+            lat: lat,
+            lon: lng,
+            zoom
+        })
+        const arr = res.display_name.split(",").reverse();
+        let address = "";
+        arr.forEach(function (str) {
+            str = str.trim();
+            if (str.match(/^ایران$/)) return;
+            if (str.match(/^\d{5}-\d{5}$/)) return;
+            if (str.match(/^استان .*$/)) return;
+            if (str.match(/^شهرستان .*$/)) return;
+            if (str.match(/^بخش .*$/)) return;
+
+            if (address !== '') address = address + '، ';
+            address = address + str;
+        });
+        if (err) return;
+        if (res) Cef('point', {
+            zoom,
+            lat: res.lat,
+            lng: res.lon,
+            name: res.display_name,
+            address: address,
+            osm_type: res.osm_type
+        });
+    }
+
+
 
     const layerStyle = {
         id: 'point',
@@ -71,7 +125,7 @@ const MainMap = () => {
                     latitude: arrayMapCenter ? arrayMapCenter[0] : center.lat,
                     zoom: center.zoom
                 }}
-                onClick={(e) => console.log(e)}
+                onClick={(e) => handleClickMap(e)}
                 id="usemap"
                 onDblClick={(e) => console.log(e)}
                 style={{ width: "100%", height: "100vh" }}
