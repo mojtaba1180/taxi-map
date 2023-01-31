@@ -1,7 +1,7 @@
 import qs from 'qs';
 import { randomColor } from 'randomcolor';
 import { RoutingApi } from '../../apis/routing-api';
-import { addCoordinates, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
+import { addCoordinates, mapCenter, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
 const MapQuery = ({ search, dispatch }) => {
 
     const query = qs.parse(search.split("?")[1]);
