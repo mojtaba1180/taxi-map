@@ -53,12 +53,12 @@ const MapDirection = () => {
                 >
                     {
                         locations.locations.map((item, idx) => {
-
+                           
                             return (
                                 <Draggable key={idx}>
                                     <DraggableItem className="draggable-item">
                                         {/* {item} */}
-                                        <IconMenu className="column-drag-handle" style={{ cursor: "grab" }} />
+                                        <IconMenu className="column-drag-handle" style={{ cursor: "grab",backgroundColor:item.color? item.color : "transparent",borderRadius:10 }} />
                                         <MapSearchBar idx={idx} />
 
                                         {

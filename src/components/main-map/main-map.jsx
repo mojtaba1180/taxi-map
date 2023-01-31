@@ -1,45 +1,36 @@
 
 import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import qs from "qs";
 import React, { useEffect, useState } from 'react';
 import { GeolocateControl, Map, Marker } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { drivers } from '../../json/drivers.json';
+import { mapCenter, selectAction, selectCenter, setDrag } from '../../store/mapSlice';
 import LocationMarker from '../location-marker/location-marker';
-
-
-
-import {
-    LocationsReady,
-    mapCenter, selectAction, selectCenter, setDrag
-} from '../../store/mapSlice';
 import LayerLineRoute from '../map-direction/layer-line-route';
 import { selectLocations } from './../../store/mapSlice';
 import './main-map.css';
+
+
+
+
 const MainMap = () => {
     //redux state
     const center = useSelector(selectCenter);
-    const {locations} = useSelector(selectLocations);
-    const locationsReady = useSelector(LocationsReady);
-    
+    const { locations } = useSelector(selectLocations);
     const mapStyle = import.meta.env.VITE_MAP_STYLE;
-
     const action = useSelector(selectAction);
     const dispatch = useDispatch();
     //react state
-    const [lat, setLat] = useState(0);
-    const [lng, setLng] = useState(0);
     const [isDrag, setIsDrag] = useState(false);
-    const [zoom, setZoom] = useState(14);
-    const [popupInfo , setPopupInfo] = useState(null);
-    //set current center 
-    useEffect(() => {
-        dispatch(mapCenter({
-            lat,
-            lng,
-            zoom
-        }))
-    }, [lat, lng, zoom]);
+    const { search } = useLocation();
+
+
+    // ANCHOR handle center mode in search query string 
+    const query = qs.parse(search.split("?")[1]);
+    const arrayMapCenter = query.center ? query.center.split(",").map(i => Number(i)) : null
 
     // set actions on map
     useEffect(() => {
@@ -51,9 +42,11 @@ const MainMap = () => {
         setIsDrag(true);
     }
     const handleDrag = ({ viewState }) => {
-        setLat(viewState.latitude);
-        setLng(viewState.longitude);
-        setZoom(viewState.zoom)
+        dispatch(mapCenter({
+            lat: viewState.latitude,
+            lng: viewState.longitude,
+            zoom: viewState.zoom
+        }))
     }
     const handleDragEnd = () => {
         setIsDrag(false);
@@ -67,19 +60,18 @@ const MainMap = () => {
             'circle-color': '#007cbf'
         }
     }
+
     return (
         <div className="map-wrap">
 
             <Map
-
-                // mapLib={mapboxgl}
                 mapLib={maplibreGl}
                 initialViewState={{
-                    longitude: center.lng,
-                    latitude: center.lat,
+                    longitude: arrayMapCenter ? arrayMapCenter[1] : center.lng,
+                    latitude: arrayMapCenter ? arrayMapCenter[0] : center.lat,
                     zoom: center.zoom
                 }}
-                onClick={(e) =>console.log(e)}
+                onClick={(e) => console.log(e)}
                 id="usemap"
                 onDblClick={(e) => console.log(e)}
                 style={{ width: "100%", height: "100vh" }}
@@ -91,12 +83,9 @@ const MainMap = () => {
                 onZoomStart={handleDragStart}
                 onZoomEnd={handleDragEnd}
             >
-
-
-                <LayerLineRoute/>
-
+                <LayerLineRoute />
                 {
-                    zoom >= 13 && drivers.map(item => {
+                    center.zoom >= 13 && drivers.map(item => {
                         return (
                             <Marker key={item.id} children={
                                 <img src='/car.png' width={15} alt="car" />
@@ -108,24 +97,23 @@ const MainMap = () => {
                     })
                 }
                 {
-                    locations?.map((item,idx) => {
-                        if(item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")){
+                    locations?.map((item, idx) => {
+                        if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
                             return (
                                 <Marker
-                                key={idx}
-                                draggable={true}
-                                children={<LocationMarker title={item.location.display_name}  />
-                                }
-                                 anchor="bottom"
-                                // onDrag={(e) => console.log(e)}
-                                latitude={item.location?.lat} longitude={item.location?.lon} />
+                                    key={idx}
+                                    draggable={!action.isMarkerLocked}
+                                    children={<LocationMarker title={item.location.display_name} color={item.color} />
+                                    }
+                                    anchor="bottom"
+                                    // onDrag={(e) => console.log(e)}
+                                    latitude={item.location?.lat} longitude={item.location?.lon} />
                             )
                         }
                     })
                 }
-               
-                <GeolocateControl 
-                position='bottom-left'
+                <GeolocateControl
+                    position='bottom-left'
                 />
                 {
                     (!action.isDirection || action.isSetLocationByMarker) && <LocationMarker centerMode={true} isDrag={isDrag} />
