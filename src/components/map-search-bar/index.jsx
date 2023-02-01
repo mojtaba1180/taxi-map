@@ -9,7 +9,7 @@ import { DirectionButton, SearchBarContainer, SearchBarInput, SearchBarInputBox 
 const MapSearchBar = (props) => {
     const { showDirection = false } = props;
     const action = useSelector(selectAction);
-    const { locations } = useSelector(selectLocations)
+    const { locations , inputIndexSelected } = useSelector(selectLocations)
     const dispatch = useDispatch();
     const [value, setValue] = useState("")
     const [debouncedValue, setDebouncedValue] = useState(value)
@@ -71,7 +71,9 @@ const MapSearchBar = (props) => {
     return (
         <div style={{ width: "100%", display: 'flex', flexDirection: "column", }} >
             <SearchBarContainer>
-                <SearchBarInputBox>
+                <SearchBarInputBox
+                 active={inputIndexSelected === props.idx ? true : false}
+                >
                     <span>
                         {
                             Loading ? (

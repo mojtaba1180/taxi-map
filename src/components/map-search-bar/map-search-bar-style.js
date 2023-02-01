@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { GrayDark, GrayLight, radius_lg } from '../../utils/variables';
+import { Primary } from './../../utils/variables';
 
 
 export const SearchBarContainer = styled.div`
@@ -15,6 +16,9 @@ export const SearchBarInputBox = styled.div`
     align-items:center;
     padding: 0 10px 0 10px ;
     position:relative;
+    transition: all .2s;
+    box-shadow: ${props => props.active ? Primary : "none"} 0px 0 0px 2px;
+    margin-top: 2px;
     span{
         z-index: 2;
         position: absolute;
@@ -41,6 +45,7 @@ export const SearchBarInput = styled.input`
     border-radius: ${radius_lg};
     outline: none;
     font-size: 15px;
+
 `;
 export const DirectionButton = styled.button`
   width: 40px;
