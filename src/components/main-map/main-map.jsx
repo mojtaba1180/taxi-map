@@ -3,7 +3,7 @@ import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import qs from "qs";
 import React, { useEffect, useState } from 'react';
-import { GeolocateControl, Map, Marker, useMap } from 'react-map-gl';
+import { Map, Marker, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
@@ -166,9 +166,9 @@ const MainMap = () => {
                         }
                     })
                 }
-                <GeolocateControl
+                {/* <GeolocateControl
                     position='bottom-left'
-                />
+                /> */}
                 {
                     (!action.isDirection || action.isSetLocationByMarker) && <LocationMarker centerMode={true} isDrag={isDrag} />
                 }

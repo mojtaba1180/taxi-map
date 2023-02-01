@@ -9,7 +9,12 @@
   z-index: 4444;
   
 }
-
+  @media screen and (max-width:420px){
+    .map-search-result-container{
+      width:420px;
+      right: 2%;
+    }
+    }
 .map-search-result-item{
     overflow-y: auto;
     height: 100%;

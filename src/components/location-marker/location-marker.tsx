@@ -6,13 +6,13 @@ interface Prop {
     isDrag: boolean,
     centerMode: boolean,
     title: any,
-    color: String
+    color?: String
 }
 const LocationMarker = ({ isDrag, centerMode, title, color }: Prop) => {
     const [open, setOpen] = React.useState(false);
     return (
 
-        <div className='marker-container' >
+        <div className={`${!centerMode && "marker-container" }`} >
 
             <Popover width={200} position="top" opened={open} withArrow shadow="md">
                 <Popover.Dropdown>

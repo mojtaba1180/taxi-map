@@ -20,11 +20,9 @@ export const MapTopContainer = styled.div`
     /* background-color: #ff0; */
     @media screen and (min-width:420px){
         max-width:420px;
-        top:0;
     }
     @media screen and (max-width:420px){
         max-width:420px;
-        bottom:1em;
     }
 
 `;

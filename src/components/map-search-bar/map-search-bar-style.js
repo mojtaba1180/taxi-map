@@ -50,7 +50,7 @@ export const SearchBarInput = styled.input`
 export const DirectionButton = styled.button`
   width: 40px;
   height: 34px;
-  margin: 5px 5px 0 3px;
+  margin: 7px 5px 0 3px;
   background-color: #0084ff;
   color: white;
   font-size: 10px;
