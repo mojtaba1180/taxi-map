@@ -21,7 +21,8 @@ const initialState = {
     showSearchBar: false,
     showDirection: true,
     isMarkerLocked: false,
-    isSearchBarCollapsed: false
+    isSearchBarCollapsed: false,
+    chooseOnMap: false
   },
   search: {
     searchResult: []
@@ -43,7 +44,7 @@ const initialState = {
       }
     ]
   },
-  markers: [],
+  markers: {},
 
 };
 
@@ -52,6 +53,12 @@ export const counterSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
+    setActions: (state, action) => {
+      state.actions = {
+        ...state.actions,
+        [Object.keys(action.payload)[0]]:Object.values(action.payload)[0]
+      }
+    },
     setDrag: (state, action) => {
       state.actions.isDrag = action.payload
     },
@@ -139,7 +146,8 @@ export const { mapCenter,
   setShowSearchBar,
   setMarkers,
   setMarkerLocked,
-  setSearchBarCollapsed
+  setSearchBarCollapsed,
+  setActions
 } = counterSlice.actions;
 
 

@@ -1,5 +1,5 @@
 import { Button, SegmentedControl } from '@mantine/core'
-import { IconArrowsDownUp, IconCar, IconMenu, IconMotorbike, IconPlus, IconTrash, IconWalk } from '@tabler/icons'
+import { IconArrowsDownUp, IconCar, IconLocation, IconMenu, IconMotorbike, IconPlus, IconTrash, IconWalk } from '@tabler/icons'
 import { AnimatePresence, motion } from "framer-motion"
 import React from 'react'
 import { useMap } from 'react-map-gl'
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Container, Draggable } from 'react-smooth-dnd'
 import MapSearchBar from '../map-search-bar'
 import useMobileSize from './../../hooks/useMobileSize'
-import { selectLocations, setLocations, setLocationsRoutedType } from './../../store/mapSlice'
+import { selectAction, selectLocations, setActions, setLocations, setLocationsRoutedType } from './../../store/mapSlice'
 import { applyDrag } from './../../utils/drag-and-drop/applyDrag'
 import { DraggableItem, MapDirectionAddLocation, MapDirectionContainer } from './map-direction-style'
 const MapDirection = () => {
@@ -15,7 +15,8 @@ const MapDirection = () => {
     const dispatch = useDispatch();
     const {usemap} = useMap();
     const { isMobile } = useMobileSize();
-    const locations = useSelector(selectLocations)
+    const locations = useSelector(selectLocations);
+    const action  = useSelector(selectAction);
     const directionType = [
         {
             label: (
@@ -75,6 +76,7 @@ const MapDirection = () => {
                         })
                     }
                 </Container>
+                <div style={{display:"flex", justifyContent:"space-around"}} >
                 {
 
                     (locations.locations.length <= 6 && !isMobile()) &&
@@ -97,6 +99,19 @@ const MapDirection = () => {
                         افزودن مسیر جدید
                     </Button>
                 }
+
+                { 
+                    <Button
+                        disabled={action.chooseOnMap}
+                        radius={"md"}
+                        rightIcon={<IconLocation />}
+                        style={{ alignSelf: "end" }}
+                        onClick={() => {dispatch(setActions({chooseOnMap: true}))}}
+                    >
+                   {action.chooseOnMap ? " در حال انتخاب از نقشه": " انتخاب از نقشه"}
+                    </Button>
+                }
+                </div>
                 <Motion
                     idx={locations.locations.length}
                 >

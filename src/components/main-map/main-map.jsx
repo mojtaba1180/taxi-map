@@ -2,30 +2,32 @@
 import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import qs from "qs";
+import randomColor from 'randomcolor';
 import React, { useEffect, useState } from 'react';
 import { Map, Marker, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
 import { drivers } from '../../json/drivers.json';
-import { mapCenter, selectAction, selectCenter, setDrag } from '../../store/mapSlice';
+import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
 import LocationMarker from '../location-marker/location-marker';
 import LayerLineRoute from '../map-direction/layer-line-route';
-import { selectLocations } from './../../store/mapSlice';
+import { selectLocations, selectMarkers } from './../../store/mapSlice';
 import './main-map.css';
-
 
 
 
 const MainMap = () => {
     //redux state
     const center = useSelector(selectCenter);
-    const { locations } = useSelector(selectLocations);
+    const { locations, inputIndexSelected } = useSelector(selectLocations);
+    const selectedMarkers = useSelector(selectMarkers);
     const mapStyle = import.meta.env.VITE_MAP_STYLE;
     const action = useSelector(selectAction);
     const dispatch = useDispatch();
     //react state
     const [isDrag, setIsDrag] = useState(false);
+    const [selectedMarker, setSelectedMarker] = useState([]); // chose on map 
     const { search } = useLocation();
     const { usemap } = useMap();
 
@@ -79,7 +81,9 @@ const MainMap = () => {
             lat: lat,
             lon: lng,
             zoom
-        })
+        });
+
+
         const arr = res.display_name.split(",").reverse();
         let address = "";
         arr.forEach(function (str) {
@@ -89,7 +93,6 @@ const MainMap = () => {
             if (str.match(/^استان .*$/)) return;
             if (str.match(/^شهرستان .*$/)) return;
             if (str.match(/^بخش .*$/)) return;
-
             if (address !== '') address = address + '، ';
             address = address + str;
         });
@@ -102,9 +105,32 @@ const MainMap = () => {
             address: address,
             osm_type: res.osm_type
         });
+        usemap.flyTo({ center: [lng, lat] });
+        if (action.isDirection, action.chooseOnMap) {
+            let arr = [...locations];
+            const handleUpdateLocation = () => {
+                return arr.map((item, idx) => {
+                    if (inputIndexSelected === idx) {
+                        return {
+                            color: randomColor(),
+                            value: res.display_name,
+                            location: res
+                        }
+                    } else {
+                        return item
+                    }
+                })
+            }
+            dispatch(setLocations(handleUpdateLocation()));
+            dispatch(setActions({ chooseOnMap: false }))
+        }
+        dispatch(setMarkers([
+            {
+                value: address,
+                location: res
+            }
+        ]))
     }
-
-
 
     const layerStyle = {
         id: 'point',
@@ -158,6 +184,22 @@ const MainMap = () => {
                                     key={idx}
                                     draggable={!action.isMarkerLocked}
                                     children={<LocationMarker title={item.location.display_name} color={item.color} />
+                                    }
+                                    anchor="bottom"
+                                    // onDrag={(e) => console.log(e)}
+                                    latitude={item.location?.lat} longitude={item.location?.lon} />
+                            )
+                        }
+                    })
+                }
+                {
+                    (selectedMarkers.length > 0) && selectedMarkers?.map((item, idx) => {
+                        if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
+                            return (
+                                <Marker
+                                    key={idx}
+                                    draggable={!action.isMarkerLocked}
+                                    children={<LocationMarker title={item.location.display_name} />
                                     }
                                     anchor="bottom"
                                     // onDrag={(e) => console.log(e)}
