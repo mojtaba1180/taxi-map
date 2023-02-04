@@ -1,8 +1,18 @@
+import { Button } from '@mantine/core'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { HomeContainer } from './home-style'
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
-    <div>salam</div>
+    <HomeContainer>
+      <Button
+        onClick={() => navigate("/map?showSearchBar=true")}
+      >
+        باز کردن نقشه
+      </Button>
+    </HomeContainer>
   )
 }
 
