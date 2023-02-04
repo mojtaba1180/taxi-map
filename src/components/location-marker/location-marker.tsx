@@ -8,7 +8,7 @@ interface Prop {
     title: any,
     color?: String
 }
-const LocationMarker = ({ isDrag, centerMode, title, color }: Prop) => {
+const LocationMarker = ({ isDrag, centerMode, title, color= "#000" }: Prop) => {
     const [open, setOpen] = React.useState(false);
     return (
 

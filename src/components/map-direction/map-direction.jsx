@@ -102,7 +102,7 @@ const MapDirection = () => {
 
                 { 
                     <Button
-                        disabled={action.chooseOnMap}
+                        disabled={(action.chooseOnMap || locations.inputIndexSelected === null)}
                         radius={"md"}
                         rightIcon={<IconLocation />}
                         style={{ alignSelf: "end" }}

@@ -27,7 +27,6 @@ const MainMap = () => {
     const dispatch = useDispatch();
     //react state
     const [isDrag, setIsDrag] = useState(false);
-    const [selectedMarker, setSelectedMarker] = useState([]); // chose on map 
     const { search } = useLocation();
     const { usemap } = useMap();
 
@@ -131,6 +130,36 @@ const MainMap = () => {
             }
         ]))
     }
+    const handleMarkerDrag = async (event, idx) => {
+        const lng = event.lngLat.lng;
+        const lat = event.lngLat.lat;
+        const zoom = parseInt(center.zoom);
+        const { res, err } = await RoutingApi.getLocation({
+            lat: lat,
+            lon: lng,
+            zoom
+        });
+        if (err) return;
+        let arr = [...locations];
+        const handleUpdateLocation = () => {
+            return arr.map((item, index) => {
+                if (index === idx) {
+                    return {
+                        color: randomColor(),
+                        value: res.display_name,
+                        location: {
+                            ...res,
+                            lat,
+                            lon: lng
+                        }
+                    }
+                } else {
+                    return item
+                }
+            })
+        }
+        dispatch(setLocations(handleUpdateLocation()));
+    }
 
     const layerStyle = {
         id: 'point',
@@ -164,18 +193,24 @@ const MainMap = () => {
                 onZoomEnd={handleDragEnd}
             >
                 <LayerLineRoute />
+
+                {/* center mode marker */}
                 {
                     center.zoom >= 13 && drivers.map(item => {
                         return (
                             <Marker key={item.id} children={
                                 <img src='/car.png' width={15} alt="car" />
                             }
-                                latitude={item.location.latitude} longitude={item.location.longitude} rotation={item.location.bearing} />
+                                draggable={!action.isMarkerLocked}
+                                latitude={item.location.latitude}
+                                longitude={item.location.longitude}
+                                rotation={item.location.bearing} />
 
 
                         )
                     })
                 }
+                {/* direction markers */}
                 {
                     locations?.map((item, idx) => {
                         if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
@@ -183,6 +218,7 @@ const MainMap = () => {
                                 <Marker
                                     key={idx}
                                     draggable={!action.isMarkerLocked}
+                                    onDragEnd={(e) => handleMarkerDrag(e, idx)}
                                     children={<LocationMarker title={item.location.display_name} color={item.color} />
                                     }
                                     anchor="bottom"
@@ -192,8 +228,9 @@ const MainMap = () => {
                         }
                     })
                 }
+                {/* choose on map markers */}
                 {
-                    (selectedMarkers.length > 0) && selectedMarkers?.map((item, idx) => {
+                    (selectedMarkers.length > 0 && action.chooseOnMap) && selectedMarkers?.map((item, idx) => {
                         if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
                             return (
                                 <Marker
@@ -208,13 +245,10 @@ const MainMap = () => {
                         }
                     })
                 }
-                {/* <GeolocateControl
-                    position='bottom-left'
-                /> */}
+
                 {
                     (!action.isDirection || action.isSetLocationByMarker) && <LocationMarker centerMode={true} isDrag={isDrag} />
                 }
-                {/* <NavigationControl position="top-left" /> */}
             </Map>
 
         </div>
