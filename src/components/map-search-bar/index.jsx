@@ -1,22 +1,22 @@
 import { Loader } from '@mantine/core';
-import qs from 'qs';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { RoutingApi } from '../../apis/routing-api';
 import { selectAction, setInputIndexSelected, setIsDirection, setIsSearch, setLocations, setOnSearch, setSearchResult } from '../../store/mapSlice';
-import http from '../../utils/http';
 import { selectLocations } from './../../store/mapSlice';
 import { DirectionButton, SearchBarContainer, SearchBarInput, SearchBarInputBox } from './map-search-bar-style';
 const MapSearchBar = (props) => {
     const { showDirection = false } = props;
     const action = useSelector(selectAction);
-    const { locations , inputIndexSelected } = useSelector(selectLocations)
+    const { locations , inputIndexSelected } = useSelector(selectLocations);
     const dispatch = useDispatch();
-    const [value, setValue] = useState("")
-    const [debouncedValue, setDebouncedValue] = useState(value)
-    const [Loading, setLoading] = useState(false)
+    const [value, setValue] = useState("");
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    const [Loading, setLoading] = useState(false);
+
     useEffect(() => {
-        const timer = setTimeout(() => setDebouncedValue(value), 1000)
-        return () => clearTimeout(timer)
+        const timer = setTimeout(() => setDebouncedValue(value), 1000);
+        return () => clearTimeout(timer);
     }, [value]);
 
 
@@ -27,7 +27,7 @@ const MapSearchBar = (props) => {
     const handleSetInputValue = (e) => {
 
         if (action.isDirection && props.idx !== undefined) {
-            let arr = [...locations]
+            let arr = [...locations];
             arr = arr.map((item, idx) => {
                 if (props.idx === idx) {
                     return {
@@ -38,33 +38,29 @@ const MapSearchBar = (props) => {
                     return { ...item }
                 }
             })
-            dispatch(setLocations(arr))
+            dispatch(setLocations(arr));
         }
         setValue(e.target.value);
     }
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         const query = {
             q: debouncedValue,
             limit: "10",
             format: "json",
             addressdetails: 1
-        }
+        };
         if (debouncedValue.length >= 3) {
             dispatch(setOnSearch(true));
             setLoading(true)
-            http.get(`/nominatim/search.php?${qs.stringify(query)}`, {
-                env: {
-                    type: "nominatim"
-                }
-            }).then(res => {
+            const {res , err} = await RoutingApi.SearchLocation(query);
+            if(err) return;
+            if(res){
                 setLoading(false);
                 dispatch(setSearchResult(res.splice(0, 8)));
                 dispatch(setOnSearch(false));
                 dispatch(setIsSearch(true));
-            }).catch(err => {
-                console.log({ err });
-            })
+            }
         }
     }
 
