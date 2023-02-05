@@ -2,15 +2,25 @@ import React, { useEffect } from 'react';
 import { Layer, Source } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { RoutingApi } from '../../apis/routing-api';
-import { addCoordinates, LocationsReady, selectCoordinates, selectLocations } from '../../store/mapSlice';
+import { addCoordinates, selectCoordinates, selectLocations } from '../../store/mapSlice';
 const LayerLineRoute = () => {
     const coordinates = useSelector(selectCoordinates);
     const locations = useSelector(selectLocations);
-    const locationsReady = useSelector(LocationsReady);
-    const dispatch = useDispatch()
-    useEffect(() => {
-        const getRoutingDirection = async () => {
-            await locationsReady.then(async (res) => {
+    const dispatch = useDispatch();
+
+
+    // check location 
+    const locationsReady = async () => {
+    let arr = []
+    await locations.locations.some(v => {
+        arr.push(Object.keys(v.location).some(key => key === "lon"))
+    })
+    // console.log(arr.every(Boolean));
+    return arr.every(Boolean)
+    }
+
+    const getRoutingDirection = async () => {
+            await locationsReady().then(async (res) => {
                 if (res) {
                     //create url
                     let lat_lon = "";
@@ -28,6 +38,8 @@ const LayerLineRoute = () => {
                 }
             })
         }
+
+    useEffect(() => {
         getRoutingDirection()
     }, [locations])
 

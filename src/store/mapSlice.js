@@ -169,15 +169,6 @@ export const selectSearchResult = (state) => state.mapStore.search.searchResult
 
 export const selectLocations = (state) => state.mapStore.locations
 
-export const LocationsReady = async (state) => {
-  let arr = []
-  await state.mapStore.locations.locations.some(v => {
-    arr.push(Object.keys(v.location).some(key => key === "lon"))
-  })
-  // console.log(arr.every(Boolean));
-  return arr.every(Boolean)
-}
-
 export const selectMarkers = (state) => state.mapStore.markers
 
 export default counterSlice.reducer;
