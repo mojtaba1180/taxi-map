@@ -470,11 +470,6 @@
   resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-2.0.1.tgz#c15367178d8bfe4765e6b47b542fe821ce259c7b"
   integrity sha512-HP6XvfNIzfoMVfyGjBckjiAOQK9WfX0ywdLubuPMPv+Vqf5fj0uCbgBQYpiqcWZT6cbyyRnTSXDheT1ugvF6UQ==
 
-"@mapbox/mapbox-gl-traffic@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-traffic/-/mapbox-gl-traffic-1.0.2.tgz#afb120633a397a6c539865db2bde5c5933dad96b"
-  integrity sha512-HeUljK/CibQIL/srbErxKNZYWie4N2F377AEvDyXeAP1qyYTP5VNklTaQ/wZjOyZ/qbPN2kStjwQR3UUP+AG7g==
-
 "@mapbox/point-geometry@0.1.0", "@mapbox/point-geometry@^0.1.0", "@mapbox/point-geometry@~0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@mapbox/point-geometry/-/point-geometry-0.1.0.tgz#8a83f9335c7860effa2eeeca254332aa0aeed8f2"
