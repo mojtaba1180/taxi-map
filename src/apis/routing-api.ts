@@ -1,5 +1,5 @@
 
-import http from './configs/mapAPi';
+import http from './configs/mapConfig';
 import OsrmApi from './configs/osrmConfig';
 interface routingEndpointProp {
     routeType: "car" | "bike" | "foot",
