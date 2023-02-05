@@ -1,5 +1,5 @@
 
-import http from './configs/axiosConfig';
+import http from './configs/mapAPi';
 import OsrmApi from './configs/osrmConfig';
 interface routingEndpointProp {
     routeType: "car" | "bike" | "foot",
