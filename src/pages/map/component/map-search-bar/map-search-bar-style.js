@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { GrayDark, GrayLight, radius_lg } from '../../utils/variables';
-import { Primary } from './../../utils/variables';
+import { GrayDark, GrayLight, Primary, radius_lg } from '../../../../utils/variables';
 
 
 export const SearchBarContainer = styled.div`

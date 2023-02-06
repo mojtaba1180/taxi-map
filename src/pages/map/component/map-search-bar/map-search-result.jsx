@@ -3,8 +3,8 @@ import { IconCurrentLocation } from '@tabler/icons';
 import randomColor from 'randomcolor';
 import { useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAction, selectSearchResult, setLocations, setSearchResult } from '../../store/mapSlice';
-import { selectLocations } from './../../store/mapSlice';
+import { selectAction, selectLocations, selectSearchResult, setLocations, setSearchResult } from '../../../../store/mapSlice';
+
 import './map-search-result-style.css';
 const MapSearchResult = () => {
   const { usemap } = useMap();

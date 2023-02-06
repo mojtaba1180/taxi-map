@@ -10,11 +10,11 @@ import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
 import { MainMenuButton } from '../../assets/style/global-style';
 import LocationMarker from '../../components/location-marker/location-marker';
-import LayerLineRoute from '../../components/map-direction/layer-line-route';
-import MapDirection from '../../components/map-direction/map-direction';
-import MapSearchBar from '../../components/map-search-bar';
 import { selectAction, selectCenter, selectLocations, selectMarkers, setIsDirection, setLocations } from '../../store/mapSlice';
-import MapSearchResult from './../../components/map-search-bar/map-search-result';
+import LayerLineRoute from './component/map-direction/layer-line-route';
+import MapDirection from './component/map-direction/map-direction';
+import MapSearchBar from './component/map-search-bar';
+import MapSearchResult from './component/map-search-bar/map-search-result';
 import MapQuery from './map-query';
 import { MapDirectionHeader, MapTopBox, MapTopContainer } from './map-style';
 function Map() {
