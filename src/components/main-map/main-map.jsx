@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
 import { drivers } from '../../json/drivers.json';
 import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
+import DriverDirections from '../driver-directions';
 import LocationMarker from '../location-marker/location-marker';
 import LayerLineRoute from '../map-direction/layer-line-route';
 import { selectLocations, selectMarkers } from './../../store/mapSlice';
@@ -104,7 +105,9 @@ const MainMap = () => {
             address: address,
             osm_type: res.osm_type
         });
-        usemap.flyTo({ center: [lng, lat] });
+        if(action.chooseOnMap){
+            usemap.flyTo({ center: [lng, lat] });
+        }
         if (action.isDirection, action.chooseOnMap) {
             let arr = [...locations];
             const handleUpdateLocation = () => {
@@ -192,8 +195,16 @@ const MainMap = () => {
                 onZoomStart={handleDragStart}
                 onZoomEnd={handleDragEnd}
             >
-                <LayerLineRoute />
 
+                {/* ############################### Direction & line layer ############################### */}
+
+                {/* Direction line  */}
+                <LayerLineRoute />
+                {/* Driver Directions */}
+                <DriverDirections />
+
+                {/* ############################### Marker ############################### */}
+                
                 {/* center mode marker */}
                 {
                     center.zoom >= 13 && drivers.map(item => {
@@ -205,8 +216,6 @@ const MainMap = () => {
                                 latitude={item.location.latitude}
                                 longitude={item.location.longitude}
                                 rotation={item.location.bearing} />
-
-
                         )
                     })
                 }
@@ -245,10 +254,11 @@ const MainMap = () => {
                         }
                     })
                 }
-
-                {
-                    (!action.isDirection || action.isSetLocationByMarker) && <LocationMarker centerMode={true} isDrag={isDrag} />
-                }
+                {/* Default location marker */}
+                {(!action.isDirection || action.isSetLocationByMarker) && <LocationMarker centerMode={true} isDrag={isDrag} />}
+                
+                
+                
             </Map>
 
         </div>

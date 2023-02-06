@@ -9,7 +9,12 @@ mainHttp.interceptors.request.use(
   function (config) {
       return{
         ...config,
+        headers:{
+          ...config.headers,
+          authorization:config.authorization? config.authorization : ""
+        }
       };
+
   },
   function (err) {
     return Promise.reject(err);

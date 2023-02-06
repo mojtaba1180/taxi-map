@@ -68,16 +68,12 @@ function Map() {
                           مسیر یاب
                         </p>
                       </MapDirectionHeader>
-
-
                   }
                 </motion.div>
               </AnimatePresence>
             </div>
             <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
-
               <AnimatePresence mode='wait'>
-
                 <motion.div
                   key={action.isDirection ? 1 : 2}
                   style={{ width: "100%" }}
@@ -88,18 +84,15 @@ function Map() {
                     duration: .1
                   }}
                 >
-
                   {/* ANCHOR direction */}
                   {
                     action.isDirection ?
                       <MapDirection />
                       : null
                   }
-
                 </motion.div>
               </AnimatePresence>
               {/*ANCHOR search result  */}
-
             </div>
             <MapSearchResult />
           </MapTopBox>

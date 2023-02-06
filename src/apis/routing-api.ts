@@ -40,10 +40,6 @@ export const RoutingApi = {
         }
     },
     getRoutingDirection: async ({ routeType, lat_lon, step }: routingEndpointProp) => {
-        /*
-        * @param : lat_lon: String 
-        * @example  {lat_lon:"51.33801773402661,31.33801773402661;51.33801773402661,31.33801773402661"}
-        */
         try {
             const res = await OsrmApi.get(routingEndpoint.directionRoute({ routeType, lat_lon, step }));
             return { res }
@@ -58,5 +54,6 @@ export const RoutingApi = {
         } catch (err) {
             return { err }
         }
-    }
+    },
+
 }
