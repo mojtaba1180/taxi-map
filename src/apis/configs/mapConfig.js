@@ -1,8 +1,9 @@
 import axios from "axios";
+import env from '../../../env.json';
 
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_MAP_API_URL,
+  baseURL: env.VITE_MAP_API_URL,
 });
 
 http.interceptors.request.use(

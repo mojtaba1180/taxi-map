@@ -3,13 +3,19 @@
 >**_NOTE:_**  use yarn to start project
 
 # env example
-
+1: create env.json
+<br/>
+2: added to root project
+<br/>
+3: use bottom env 
 ```
 VITE_MAP_API_URL=https://map.azadiweb.ir
 VITE_MAP_API_OSRM_URL=https://osrm.azadiweb.ir
 VITE_MAP_STYLE="https://tiles.raah.ir/dynamic/new_style_preview.json"
 VITE_MAIN_API_URL=https://bolvar.api.netserv.ir
 ```
+>**_NOTE:_** During build, please put env in this path => **dist/env.json**
+
 
 # Yarn Start Project 
  

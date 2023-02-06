@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Map, Marker, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import env from '../../../env.json';
 import { RoutingApi } from '../../apis/routing-api';
 import { drivers } from '../../json/drivers.json';
 import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
@@ -22,7 +23,7 @@ const MainMap = () => {
     const center = useSelector(selectCenter);
     const { locations, inputIndexSelected } = useSelector(selectLocations);
     const selectedMarkers = useSelector(selectMarkers);
-    const mapStyle = import.meta.env.VITE_MAP_STYLE;
+    const mapStyle = env.VITE_MAP_STYLE;
     const action = useSelector(selectAction);
     const dispatch = useDispatch();
     //react state

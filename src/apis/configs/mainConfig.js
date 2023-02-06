@@ -1,8 +1,8 @@
 import axios from "axios";
-
+import env from '../../../env.json';
 
 const mainHttp = axios.create({
-  baseURL: import.meta.env.VITE_MAIN_API_URL,
+  baseURL: env.VITE_MAIN_API_URL,
 });
 
 mainHttp.interceptors.request.use(
