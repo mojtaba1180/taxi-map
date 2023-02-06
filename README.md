@@ -77,5 +77,6 @@ Map Query
 | `marker_locked`| lock all markers      | `false`   |
 | `collapsed`| minimize search bar       | `Pending`   |
 
+# Docker 
 
-
+pending ...
