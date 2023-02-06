@@ -1,8 +1,13 @@
 import React from 'react'
+import MainMap from '../../components/main-map/main-map'
 
 const MapOrder = () => {
     return (
-        <div></div>
+        <MainMap>
+            <div>
+
+            </div>
+        </MainMap>
     )
 }
 

@@ -1,14 +1,27 @@
 import { Loader } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RoutingApi } from '../../apis/routing-api';
-import { selectAction, setInputIndexSelected, setIsDirection, setIsSearch, setLocations, setOnSearch, setSearchResult } from '../../store/mapSlice';
-import { selectLocations } from './../../store/mapSlice';
-import { DirectionButton, SearchBarContainer, SearchBarInput, SearchBarInputBox } from './map-search-bar-style';
+import { RoutingApi } from '../../../../apis/routing-api';
+import {
+    selectAction,
+    selectLocations,
+    setInputIndexSelected,
+    setIsDirection,
+    setIsSearch,
+    setLocations,
+    setOnSearch,
+    setSearchResult
+} from '../../../../store/mapSlice';
+import {
+    DirectionButton,
+    SearchBarContainer,
+    SearchBarInput,
+    SearchBarInputBox
+} from './map-search-bar-style';
 const MapSearchBar = (props) => {
     const { showDirection = false } = props;
     const action = useSelector(selectAction);
-    const { locations , inputIndexSelected } = useSelector(selectLocations);
+    const { locations, inputIndexSelected } = useSelector(selectLocations);
     const dispatch = useDispatch();
     const [value, setValue] = useState("");
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -53,9 +66,9 @@ const MapSearchBar = (props) => {
         if (debouncedValue.length >= 3) {
             dispatch(setOnSearch(true));
             setLoading(true)
-            const {res , err} = await RoutingApi.SearchLocation(query);
-            if(err) return;
-            if(res){
+            const { res, err } = await RoutingApi.SearchLocation(query);
+            if (err) return;
+            if (res) {
                 setLoading(false);
                 dispatch(setSearchResult(res.splice(0, 8)));
                 dispatch(setOnSearch(false));
@@ -68,7 +81,7 @@ const MapSearchBar = (props) => {
         <div style={{ width: "100%", display: 'flex', flexDirection: "column", }} >
             <SearchBarContainer>
                 <SearchBarInputBox
-                 active={inputIndexSelected === props.idx ? true : false}
+                    active={inputIndexSelected === props.idx ? true : false}
                 >
                     <span>
                         {
