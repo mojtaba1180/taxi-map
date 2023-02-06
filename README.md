@@ -1,5 +1,7 @@
 # Taxi-Peyk
 
+>**_NOTE:_**  use yarn to start project
+
 # env example
 
 ```
@@ -30,7 +32,7 @@ yarn preview
 ```
 
 
-
+<!-- 
 # Npm Start Project 
  
 
@@ -49,7 +51,7 @@ npm run  build
 preview or serve
 ```
 npm run preview
-```
+``` -->
 
 # Getting started
 
