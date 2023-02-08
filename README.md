@@ -63,7 +63,9 @@ npm run preview
 
 # Getting started
 
-Map Query
+## Map Query
+
+### route: **/map**
 
 | name     | detail      | default and example  
 | ------------- | ------------- | --------  |
@@ -77,6 +79,19 @@ Map Query
 | `marker_locked`| lock all markers      | `false`   |
 | `collapsed`| minimize search bar       | `Pending`   |
 
+<br><br><br>
+
+### route: **/map/order**
+
+| name     | detail      | default and example  
+| ------------- | ------------- | --------  |
+| `start`| set start time **(required)**    | `2023-01-31 08:00:00`   |
+| `end`  | set end time **(required)**      | `2023-01-31 23:00:00`   |
+| `top`  | number of location               | `500`   |
+| `order_app_id`| filter by peyk id type: `number`        | `10001`   |
+| `center`| set map center      | `center=32.66548365103051,51.666493402459196`   |
+
+<br><br><br><br><br>
 # Docker 
 
 pending ...
