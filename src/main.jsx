@@ -16,18 +16,20 @@ const rtlCache = createEmotionCache({
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
-    <Provider store={store} >
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        emotionCache={rtlCache}
-        theme={{ dir: 'rtl' }}
+  <Provider store={store} >
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      emotionCache={rtlCache}
+      theme={{ dir: 'rtl' }}
+    >
+      <MapProvider
+
       >
-        <MapProvider>
-          <App />
-        </MapProvider>
-      </MantineProvider>
-    </Provider>
+        <App />
+      </MapProvider>
+    </MantineProvider>
+  </Provider>
   // </React.StrictMode>
   ,
 )

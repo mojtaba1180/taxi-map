@@ -1,5 +1,6 @@
 
 import qs from 'qs';
+import MainHttp from './configs/mainConfig';
 import MapHttp from './configs/mapConfig';
 import OsrmApi from './configs/osrmConfig';
 interface routingEndpointProp {
@@ -18,8 +19,13 @@ interface nominatimSearchProp {
     addressdetails: Number,
     format?: "json",
 }
-
-
+interface getOrderLocationsProp {
+    start: String,
+    end: String,
+    top: String,
+    order_app_id?: String
+    auth_key?: String,
+}
 
 const baseEndpoint = {
     nominatim: "nominatim"
@@ -27,7 +33,8 @@ const baseEndpoint = {
 const routingEndpoint = {
     directionRoute: ({ routeType, lat_lon, step }: routingEndpointProp) => `/routed-${routeType ? routeType : "car"}/route/v1/driving/${lat_lon}?steps=${step ? step : false}&geometries=geojson`,
     nominatimReverse: ({ lat, lon, zoom }: nominatimReverseProp) => `${baseEndpoint.nominatim}/reverse.php?lat=${lat}&lon=${lon}&zoom=${zoom}8&addressdetails=1&format=json`,
-    nominatimSearch: ({ q, limit, addressdetails, format }: nominatimSearchProp) => `${baseEndpoint.nominatim}/search.php?${qs.stringify({ q, limit, addressdetails, format })}`
+    nominatimSearch: ({ q, limit, addressdetails, format }: nominatimSearchProp) => `${baseEndpoint.nominatim}/search.php?${qs.stringify({ q, limit, addressdetails, format })}`,
+    getOrderLocations: ({ start, end, top, order_app_id }: getOrderLocationsProp) => `/location?${qs.stringify({ start, end, top, order_app_id })}`
 };
 
 export const RoutingApi = {
@@ -55,5 +62,18 @@ export const RoutingApi = {
             return { err }
         }
     },
+    getOrderLocations: async ({ auth_key, start, end, top, order_app_id }: getOrderLocationsProp) => {
+        try {
+            const res = await MainHttp.get(routingEndpoint.getOrderLocations({ start, end, top, order_app_id }), {
+                headers: {
+                    "Authorization": `Bearer ${auth_key}`
+                }
+            });
+            return { res }
+        } catch (err) {
+            return { err }
+        }
+    },
+
 
 }

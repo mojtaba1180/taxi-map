@@ -8,7 +8,7 @@ import MapSearchBar from '../map-search-bar'
 
 import useMobileSize from '../../../../hooks/useMobileSize'
 
-import { selectAction, selectLocations, setLocations, setLocationsRoutedType } from '../../../../store/mapSlice'
+import { selectAction, selectLocations, setLocations,setActions, setLocationsRoutedType } from '../../../../store/mapSlice'
 import { applyDrag } from '../../../../utils/drag-and-drop/applyDrag'
 import { DraggableItem, MapDirectionAddLocation, MapDirectionContainer } from './map-direction-style'
 const MapDirection = () => {

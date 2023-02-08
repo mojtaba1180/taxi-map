@@ -13,8 +13,6 @@ import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocation
 import { selectLocations } from './../../store/mapSlice';
 import './main-map.css';
 
-
-
 const MainMap = ({ children }) => {
     //redux state
     const center = useSelector(selectCenter);
