@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <HomeContainer>
       <Button
-        onClick={() => navigate("/map?showSearchBar=true")}
+        onClick={() => navigate("/ui/map?showSearchBar=true")}
       >
         باز کردن نقشه
       </Button>

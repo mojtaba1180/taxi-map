@@ -7,6 +7,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 const routes = [
     {
         index: true,
+        path: baseUrl,
         element: <Home />,
         state: "home"
     },
