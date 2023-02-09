@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GrayDark, GrayLight, Primary, radius_lg, radius_sm } from '../../../utils/variables';
+import { GrayDark, GrayLight, Primary, radius_lg, radius_sm, Secondary } from '../../../utils/variables';
 
 export const MapOrderContainer = styled.div`
 
@@ -84,7 +84,7 @@ export const MapOrderListItem = styled.li`
     align-items: center;
     cursor: pointer;
     transition: all .3s;
-    border: 2px solid ${GrayLight};
+    border: 1px solid ${Secondary};
     &:hover {
         background-color: #fff;
     }
