@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import { Map, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import env from '../../../env.json';
 import { RoutingApi } from '../../apis/routing-api';
 import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
 import { selectLocations } from './../../store/mapSlice';
@@ -17,14 +16,13 @@ const MainMap = ({ children }) => {
     //redux state
     const center = useSelector(selectCenter);
     const { locations, inputIndexSelected } = useSelector(selectLocations);
-    const mapStyle = env.VITE_MAP_STYLE;
+    const mapStyle = import.meta.env.VITE_MAP_STYLE;
     const action = useSelector(selectAction);
     const dispatch = useDispatch();
     //react state
     const { search } = useLocation();
     const { usemap } = useMap();
     const [isDrag, setIsDrag] = useState(false);
-
     // ANCHOR handle center mode in search query string 
     const query = qs.parse(search.split("?")[1]);
     const arrayMapCenter = query.center ? query.center.split(",").map(i => Number(i)) : null
@@ -73,55 +71,57 @@ const MainMap = ({ children }) => {
             lon: lng,
             zoom
         });
-
-        const arr = res.display_name.split(",").reverse();
-        let address = "";
-        arr.forEach(function (str) {
-            str = str.trim();
-            if (str.match(/^ایران$/)) return;
-            if (str.match(/^\d{5}-\d{5}$/)) return;
-            if (str.match(/^استان .*$/)) return;
-            if (str.match(/^شهرستان .*$/)) return;
-            if (str.match(/^بخش .*$/)) return;
-            if (address !== '') address = address + '، ';
-            address = address + str;
-        });
         if (err) return;
-        if (res) Cef('point', {
-            zoom,
-            lat: res.lat,
-            lng: res.lon,
-            name: res.display_name,
-            address: address,
-            osm_type: res.osm_type
-        });
-        if (action.chooseOnMap) {
-            usemap.flyTo({ center: [lng, lat] });
-        }
-        if (action.isDirection, action.chooseOnMap) {
-            let arr = [...locations];
-            const handleUpdateLocation = () => {
-                return arr.map((item, idx) => {
-                    if (inputIndexSelected === idx) {
-                        return {
-                            color: randomColor(),
-                            value: res.display_name,
-                            location: res
+        if (res) {
+
+            const arr = res.display_name.split(",").reverse();
+            let address = "";
+            arr.forEach(function (str) {
+                str = str.trim();
+                if (str.match(/^ایران$/)) return;
+                if (str.match(/^\d{5}-\d{5}$/)) return;
+                if (str.match(/^استان .*$/)) return;
+                if (str.match(/^شهرستان .*$/)) return;
+                if (str.match(/^بخش .*$/)) return;
+                if (address !== '') address = address + '، ';
+                address = address + str;
+            });
+            Cef('point', {
+                zoom,
+                lat: res.lat,
+                lng: res.lon,
+                name: res.display_name,
+                address: address,
+                osm_type: res.osm_type
+            });
+            if (action.chooseOnMap) {
+                usemap.flyTo({ center: [lng, lat] });
+            }
+            if (action.isDirection, action.chooseOnMap) {
+                let arr = [...locations];
+                const handleUpdateLocation = () => {
+                    return arr.map((item, idx) => {
+                        if (inputIndexSelected === idx) {
+                            return {
+                                color: randomColor(),
+                                value: res.display_name,
+                                location: res
+                            }
+                        } else {
+                            return item
                         }
-                    } else {
-                        return item
-                    }
-                })
+                    })
+                }
+                dispatch(setLocations(handleUpdateLocation()));
+                dispatch(setActions({ chooseOnMap: false }))
             }
-            dispatch(setLocations(handleUpdateLocation()));
-            dispatch(setActions({ chooseOnMap: false }))
+            dispatch(setMarkers([
+                {
+                    value: address,
+                    location: res
+                }
+            ]))
         }
-        dispatch(setMarkers([
-            {
-                value: address,
-                location: res
-            }
-        ]))
     }
 
     return (
