@@ -131,7 +131,7 @@ const MainMap = ({ children }) => {
                 initialViewState={{
                     longitude: arrayMapCenter ? arrayMapCenter[1] : center.lng,
                     latitude: arrayMapCenter ? arrayMapCenter[0] : center.lat,
-                    zoom: center.zoom
+                    zoom: query.z ? query.z : center.zoom // handle set zoom on url query string or default zoom
                 }}
                 onClick={(e) => handleClickMap(e)}
                 id="usemap"

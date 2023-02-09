@@ -1,7 +1,7 @@
 import qs from 'qs';
 import { randomColor } from 'randomcolor';
 import { RoutingApi } from '../../apis/routing-api';
-import { addCoordinates, mapCenter, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
+import { addCoordinates, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
 const MapQuery = ({ search, dispatch }) => {
 
     const query = qs.parse(search.split("?")[1]);
@@ -10,7 +10,8 @@ const MapQuery = ({ search, dispatch }) => {
     if (query.showSearchBar) dispatch(setShowSearchBar(parse(query.showSearchBar)));
     if (query.loc) handleLoc(query.loc, dispatch);
     //query.center center mode query handler in file components/main-map/main-map.jsx 
-    if (query.z) handleZoom(query.z, dispatch);
+    //query.z center mode query handler in file components/main-map/main-map.jsx 
+
     if (query.type) handleType(query.type, dispatch);
     if (query.markers) handleMarkers(query.markers, dispatch);
     if (query.marker_locked) handleMarkerLocked(parse(query.marker_locked), dispatch);
@@ -49,12 +50,7 @@ const handleLoc = async (loc, dispatch) => {
         })
     }
 }
-// handle set zoom map 
-const handleZoom = (z, dispatch) => {
-    dispatch(mapCenter({
-        zoom:z
-    }))
-}
+
 // handle set direction type
 const handleType = (type, dispatch) => {
     if(type === "car"|| type === "bike" || type === "foot"){
