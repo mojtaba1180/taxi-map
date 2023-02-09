@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const OsrmApi = axios.create({
-  baseURL:import.meta.env.VITE_MAP_API_OSRM_URL,
+  baseURL:import.meta.env.OSRM_URL,
 });
 
 OsrmApi.interceptors.request.use(

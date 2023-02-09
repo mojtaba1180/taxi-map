@@ -1,14 +1,14 @@
 import axios from "axios";
 
-
-const http = axios.create({
-  baseURL: import.meta.env.VITE_MAP_API_URL,
+const MainApi = axios.create({
+  baseURL: import.meta.env.API_URL
 });
 
-http.interceptors.request.use(
+MainApi.interceptors.request.use(
   function (config) {
       return{
         ...config,
+
       };
   },
   function (err) {
@@ -16,7 +16,7 @@ http.interceptors.request.use(
   }
 );
 
-http.interceptors.response.use(
+MainApi.interceptors.response.use(
   function (response) {
     return response.data;
   },
@@ -25,4 +25,4 @@ http.interceptors.response.use(
   }
 );
 
-export default http;
+export default MainApi;

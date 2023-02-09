@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const mainHttp = axios.create({
-  baseURL: import.meta.env.VITE_MAIN_API_URL
+
+const NomiApi = axios.create({
+  baseURL: import.meta.env.NOMINATIM_URL,
 });
 
-mainHttp.interceptors.request.use(
+NomiApi.interceptors.request.use(
   function (config) {
       return{
         ...config,
-
       };
   },
   function (err) {
@@ -16,7 +16,7 @@ mainHttp.interceptors.request.use(
   }
 );
 
-mainHttp.interceptors.response.use(
+NomiApi.interceptors.response.use(
   function (response) {
     return response.data;
   },
@@ -25,4 +25,4 @@ mainHttp.interceptors.response.use(
   }
 );
 
-export default mainHttp;
+export default NomiApi;
