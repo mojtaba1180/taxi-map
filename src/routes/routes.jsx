@@ -3,27 +3,27 @@ import MapLive from '../pages/map-live/index';
 import MapOrder from "../pages/map-order";
 import Map from './../pages/map/index';
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
+
 const routes = [
     {
         index: true,
-        path: baseUrl,
+        path: "/",
         element: <Home />,
         state: "home"
     },
     {
 
-        path: `${baseUrl}/map`,
+        path: `/map`,
         element: <Map />,
 
     },
     {
-        path: `${baseUrl}/map/order`,
+        path: `/map/order`,
         element: <MapOrder />,
 
     },
     {
-        path: `${baseUrl}/map/live`,
+        path: `/map/live`,
         element: <MapLive />,
 
     },
