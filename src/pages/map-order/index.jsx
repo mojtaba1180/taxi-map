@@ -10,9 +10,10 @@ import MainMap from '../../components/main-map/main-map';
 const MapOrder = () => {
     const [loading, setLoading] = React.useState(false);
     return (
-        <MainMap>
-            {/* <MapOrderContainer> */}
-            {/* <MapOrderRightBox>
+        <>
+            <MainMap>
+                {/* <MapOrderContainer> */}
+                {/* <MapOrderRightBox>
                     <MapOrderRightBoxTitle >
                         نمایش  مسیر رانندگان
                     </MapOrderRightBoxTitle>
@@ -20,25 +21,26 @@ const MapOrder = () => {
                         <span>{loading ? <Loader size="sm" /> : <IconSearch />}</span>
                         <MapOrderSearchInput
                             placeholder='جستجو اعضا...'
-                        />
-                    </MapOrderSearch>
-                    <MapOrderList>
-                        <MapOrderListItem>
+                            />
+                            </MapOrderSearch>
+                            <MapOrderList>
+                            <MapOrderListItem>
                             <div>
                                 <MapOrderListItemTitle>
-                                    نام:  محمد عظیمی
+                                نام:  محمد عظیمی
                                 </MapOrderListItemTitle>
                                 <MapOrderListItemContent>
                                     پیک شماره یک به سمت  میدان ازادی
                                 </MapOrderListItemContent>
-                            </div>
+                                </div>
                             <IconChevronLeft className="icon" />
-                        </MapOrderListItem>
+                            </MapOrderListItem>
                     </MapOrderList>
                 </MapOrderRightBox> */}
-            <OrderDirections />
-            {/* </MapOrderContainer> */}
-        </MainMap>
+                <OrderDirections />
+                {/* </MapOrderContainer> */}
+            </MainMap>
+        </>
     )
 }
 
