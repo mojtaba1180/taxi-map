@@ -1,0 +1,22 @@
+.map-order-marker{
+    transform: translateY(-50%);
+    position: relative;
+
+}
+.map-order-marker-first,.map-order-marker-last{
+    width: 60px;
+    height:30px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px -3px #999;
+    z-index: 1;
+}
+.map-order-marker span{
+    width: 10px ;
+    height: 10px;
+    border-radius: 10px;
+}
