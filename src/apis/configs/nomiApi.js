@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const NomiApi = axios.create({
-  baseURL: import.meta.env.NOMINATIM_URL,
+  baseURL: import.meta.env.VITE_NOMINATIM_URL,
 });
 
 NomiApi.interceptors.request.use(

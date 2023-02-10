@@ -16,7 +16,7 @@ const MainMap = ({ children }) => {
     //redux state
     const center = useSelector(selectCenter);
     const { locations, inputIndexSelected } = useSelector(selectLocations);
-    const mapStyle = import.meta.env.MAP_STYLE;
+    const mapStyle = import.meta.env.VITE_MAP_STYLE;
     const action = useSelector(selectAction);
     const dispatch = useDispatch();
     //react state

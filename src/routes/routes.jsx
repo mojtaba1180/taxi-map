@@ -7,7 +7,7 @@ import Map from './../pages/map/index';
 const routes = [
     {
         index: true,
-        path: "/ui",
+        path: "/",
         element: <Home />,
         state: "home"
     },
