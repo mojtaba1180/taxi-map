@@ -9,11 +9,13 @@
 <br/>
 3: use bottom env 
 ```
-NOMINATIM_URL= "https://map.azadiweb.ir/nominatim"
-OSRM_URL= "https://osrm.azadiweb.ir"
-MAP_STYLE= "https://tiles.raah.ir/dynamic/new_style_preview.json"
-API_URL= "https://bolvar.api.netserv.ir"
-BASE_URL="/ui"
+VITE_APP_NAME="peyk"
+VITE_NOMINATIM_URL= "https://map.azadiweb.ir"
+VITE_OSRM_URL= "https://osrm.azadiweb.ir"
+VITE_MAP_STYLE= "https://tiles.raah.ir/dynamic/new_style_preview.json"
+VITE_API_URL= "https://bolvar.api.netserv.ir"
+VITE_BASE_URL="/ui"
+
 ```
 
 # Yarn Start Project 
