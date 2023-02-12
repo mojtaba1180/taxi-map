@@ -1,3 +1,4 @@
+import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 
 const MainApi = axios.create({
@@ -21,6 +22,13 @@ MainApi.interceptors.response.use(
     return response.data;
   },
   function (err) {
+    if(err.response.status === 401){
+      showNotification({
+        color:"red",
+        title: "مشکلی رخ داده است",
+        message: "دسترسی غیرمجاز  ۴۰۱"
+      });
+    }
     return Promise.reject(err);
   }
 );
