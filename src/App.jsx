@@ -1,3 +1,4 @@
+import { NotificationsProvider } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes/routes";
@@ -7,12 +8,12 @@ function App() {
   //handle route query
 
   return (
-    <>
+    <NotificationsProvider>
       <Helmet>
         <title>{import.meta.env.VITE_APP_NAME}</title>
       </Helmet>
       <RouterProvider router={router} />
-    </>
+    </NotificationsProvider>
   )
 }
 

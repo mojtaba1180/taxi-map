@@ -6,7 +6,7 @@ import { MapProvider } from 'react-map-gl';
 import { Provider } from 'react-redux';
 import rtlPlugin from 'stylis-plugin-rtl';
 import App from './App';
-import './index.css';
+import './main.css';
 import { store } from './store/store';
 
 const rtlCache = createEmotionCache({
@@ -23,9 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       emotionCache={rtlCache}
       theme={{ dir: 'rtl' }}
     >
-      <MapProvider
-
-      >
+      <MapProvider>
         <App />
       </MapProvider>
     </MantineProvider>
