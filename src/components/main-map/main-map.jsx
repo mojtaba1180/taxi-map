@@ -1,11 +1,10 @@
 
 import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import qs from "qs";
 import React, { useEffect, useState } from 'react';
 import { Map, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
 import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
 import { selectLocations } from './../../store/mapSlice';
@@ -20,11 +19,11 @@ const MainMap = ({ children }) => {
     const dispatch = useDispatch();
     //react state
     const { search } = useLocation();
+    const [searchParam, setSearchParam] = useSearchParams();
     const { usemap } = useMap();
     const [isDrag, setIsDrag] = useState(false);
     // ANCHOR handle center mode in search query string 
-    const query = qs.parse(search.split("?")[1]);
-    const arrayMapCenter = query.center ? query.center.split(",").map(i => Number(i)) : null
+    const arrayMapCenter = searchParam.get("center") ? searchParam.get("center").split(",").map(i => Number(i)) : null
 
 
     useEffect(() => {
@@ -58,6 +57,10 @@ const MainMap = ({ children }) => {
         }))
     }
     const handleDragEnd = () => {
+        setSearchParam({
+            z: center.zoom,
+            center: `${center.lat},${center.lng}`
+        })
         setIsDrag(false);
     }
 
@@ -121,7 +124,6 @@ const MainMap = ({ children }) => {
             ]))
         }
     }
-
     return (
         <div className="map-wrap">
             <Map
@@ -129,7 +131,7 @@ const MainMap = ({ children }) => {
                 initialViewState={{
                     longitude: arrayMapCenter ? arrayMapCenter[1] : center.lng,
                     latitude: arrayMapCenter ? arrayMapCenter[0] : center.lat,
-                    zoom: query.z ? query.z : center.zoom // handle set zoom on url query string or default zoom
+                    zoom: searchParam.get("z") ? searchParam.get("z") : center.zoom // handle set zoom on url query string or default zoom
                 }}
                 onClick={(e) => handleClickMap(e)}
                 id="usemap"
