@@ -29,8 +29,8 @@ interface getOrderLocationsProp {
 
 const routingEndpoint = {
     directionRoute: ({ routeType, lat_lon, step }: routingEndpointProp) => `/routed-${routeType ? routeType : "car"}/route/v1/driving/${lat_lon}?steps=${step ? step : false}&geometries=geojson`,
-    nomiReverse: ({ lat, lon, zoom }: nomiReverseProp) => `/nominatim/reverse.php?lat=${lat}&lon=${lon}&zoom=${zoom}8&addressdetails=1&format=json`,
-    nomiSearch: ({ q, limit, addressdetails, format }: nomiSearchProp) => `/nominatim/search.php?${qs.stringify({ q, limit, addressdetails, format })}`,
+    nomiReverse: ({ lat, lon, zoom }: nomiReverseProp) => `/reverse.php?lat=${lat}&lon=${lon}&zoom=${zoom}8&addressdetails=1&format=json`,
+    nomiSearch: ({ q, limit, addressdetails, format }: nomiSearchProp) => `/search.php?${qs.stringify({ q, limit, addressdetails, format })}`,
     getOrderLocations: ({ start, end, top, order_app_id }: getOrderLocationsProp) => `/location?${qs.stringify({ start, end, top, order_app_id })}`
 };
 

@@ -10,7 +10,7 @@
 3: use bottom env 
 ```
 VITE_APP_NAME="peyk"
-VITE_NOMINATIM_URL= "https://map.azadiweb.ir"
+VITE_NOMINATIM_URL= "https://map.azadiweb.ir/nominatim"
 VITE_OSRM_URL= "https://osrm.azadiweb.ir"
 VITE_MAP_STYLE= "https://tiles.raah.ir/dynamic/new_style_preview.json"
 VITE_API_URL= "https://bolvar.api.netserv.ir"
