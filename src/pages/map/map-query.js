@@ -1,5 +1,4 @@
 import qs from 'qs';
-import { randomColor } from 'randomcolor';
 import { RoutingApi } from '../../apis/routing-api';
 import { addCoordinates, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
 import { Primary } from '../../utils/variables';
@@ -14,10 +13,9 @@ const MapQuery = ({ search, dispatch }) => {
     //query.z center mode query handler in file components/main-map/main-map.jsx 
 
     if (query.type) handleType(query.type, dispatch);
-    if (query.markers) handleMarkers(query.markers, dispatch);
+    if (query.markers) handleMarkers(query, dispatch);
     if (query.marker_locked) handleMarkerLocked(parse(query.marker_locked), dispatch);
     if (query.collapsed) handleCollapsed(parse(query.collapsed), dispatch);
-
 }
 
 // handle set direction locations and set route direction line
@@ -59,8 +57,8 @@ const handleType = (type, dispatch) => {
     }
 }
 
-const handleMarkers = async (markers , dispatch) => {
-   const ArrayMarkers = markers.split(";").map(item => item.split(",").map(i => Number(i)))
+const handleMarkers = async (query , dispatch) => {
+   const ArrayMarkers = query.markers.split(";").map(item => item.split(",").map(i => Number(i)))
     let resultMarkers = Promise.all(
         ArrayMarkers.map(async (marker) => {
             const { res, err } = await RoutingApi.getLocation({
@@ -69,9 +67,8 @@ const handleMarkers = async (markers , dispatch) => {
                 zoom: 18
             })
             return {
-                color: randomColor(),
-                value: res?.display_name,
-                location: res
+                value: query.marker_name ? query.marker_name:  res?.display_name,
+                location: res,
             }
         })
     )
