@@ -134,26 +134,25 @@ function Map() {
       }
       <MainMap >
         <LayerLineRoute />
-        {
-          locations?.map((item, idx) => {
-            if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
-              return (
-                <Marker
-                  key={idx}
-                  draggable={!action.isMarkerLocked}
-                  onDragEnd={(e) => handleMarkerDrag(e, idx)}
-                  children={<LocationMarker title={item.location.display_name} color={item.color} />
-                  }
-                  anchor="bottom"
-                  // onDrag={(e) => console.log(e)}
-                  latitude={item.location?.lat} longitude={item.location?.lon} />
-              )
-            }
-          })
+        {(action.isDirection) && locations?.map((item, idx) => {
+          if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
+            return (
+              <Marker
+                key={idx}
+                draggable={!action.isMarkerLocked}
+                onDragEnd={(e) => handleMarkerDrag(e, idx)}
+                children={<LocationMarker title={item.location.display_name} color={item.color} />
+                }
+                anchor="bottom"
+                // onDrag={(e) => console.log(e)}
+                latitude={item.location?.lat} longitude={item.location?.lon} />
+            )
+          }
+        })
         }
-        {/* choose on map markers */}
+
         {
-          (selectedMarkers.length > 0 && action.chooseOnMap) && selectedMarkers?.map((item, idx) => {
+          (selectedMarkers.length > 0 && !action.isDirection) && selectedMarkers?.map((item, idx) => {
             if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
               return (
                 <Marker
@@ -169,9 +168,8 @@ function Map() {
           })
         }
 
-
         {/* Default location marker */}
-        {(!action.isDirection || action.isSetLocationByMarker) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
+        {(!action.isDirection && selectedMarkers.length == 0) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
 
 
 

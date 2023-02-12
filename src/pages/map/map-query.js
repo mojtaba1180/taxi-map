@@ -2,6 +2,7 @@ import qs from 'qs';
 import { randomColor } from 'randomcolor';
 import { RoutingApi } from '../../apis/routing-api';
 import { addCoordinates, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
+import { Primary } from '../../utils/variables';
 const MapQuery = ({ search, dispatch }) => {
 
     const query = qs.parse(search.split("?")[1]);
@@ -23,14 +24,14 @@ const MapQuery = ({ search, dispatch }) => {
 const handleLoc = async (loc, dispatch) => {
     const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => Number(i)))
     let resultLocation = Promise.all(
-        ArrayLocations.map(async (location) => {
+        ArrayLocations.map(async (location,idx) => {
             const { res, err } = await RoutingApi.getLocation({
                 lat: location[0],
                 lon: location[1],
                 zoom: 18
             })
             return {
-                color: randomColor(),
+                color:(idx === ArrayLocations.length - 1) ? "#00ff33" : Primary ,
                 value: res.display_name,
                 location: res
             }}))
@@ -69,7 +70,7 @@ const handleMarkers = async (markers , dispatch) => {
             })
             return {
                 color: randomColor(),
-                value: res.display_name,
+                value: res?.display_name,
                 location: res
             }
         })
