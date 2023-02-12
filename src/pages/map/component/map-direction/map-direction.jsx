@@ -8,7 +8,7 @@ import MapSearchBar from '../map-search-bar'
 
 import useMobileSize from '../../../../hooks/useMobileSize'
 
-import { selectAction, selectLocations, setLocations,setActions, setLocationsRoutedType } from '../../../../store/mapSlice'
+import { selectAction, selectLocations, setActions, setLocations, setLocationsRoutedType } from '../../../../store/mapSlice'
 import { applyDrag } from '../../../../utils/drag-and-drop/applyDrag'
 import { DraggableItem, MapDirectionAddLocation, MapDirectionContainer } from './map-direction-style'
 const MapDirection = () => {
@@ -59,7 +59,7 @@ const MapDirection = () => {
                                 <Draggable key={idx}>
                                     <DraggableItem className="draggable-item">
                                         {/* {item} */}
-                                        <IconMenu className="column-drag-handle" style={{ cursor: "grab", backgroundColor: item.color ? item.color : "transparent", borderRadius: 10 }} />
+                                        <IconMenu className="column-drag-handle" style={{ cursor: "grab", backgroundColor: "transparent", borderRadius: 10 }} />
                                         <MapSearchBar idx={idx} />
 
                                         {

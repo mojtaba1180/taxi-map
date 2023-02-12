@@ -2,7 +2,6 @@ import MainMap from '../../components/main-map/main-map';
 // import MapBoxMap from './components/main-map/mapbox-gl';
 import { IconChevronRight, IconMenu2 } from '@tabler/icons';
 import { AnimatePresence, motion } from 'framer-motion';
-import randomColor from 'randomcolor';
 import { useLayoutEffect } from 'react';
 import { Marker } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +10,7 @@ import { RoutingApi } from '../../apis/routing-api';
 import { MainMenuButton } from '../../assets/style/global-style';
 import LocationMarker from '../../components/location-marker/location-marker';
 import { selectAction, selectCenter, selectLocations, selectMarkers, setIsDirection, setLocations } from '../../store/mapSlice';
+import { Primary } from '../../utils/variables';
 import LayerLineRoute from './component/map-direction/layer-line-route';
 import MapDirection from './component/map-direction/map-direction';
 import MapSearchBar from './component/map-search-bar';
@@ -45,7 +45,6 @@ function Map() {
       return arr.map((item, index) => {
         if (index === idx) {
           return {
-            color: randomColor(),
             value: res.display_name,
             location: {
               ...res,
@@ -141,7 +140,7 @@ function Map() {
                 key={idx}
                 draggable={!action.isMarkerLocked}
                 onDragEnd={(e) => handleMarkerDrag(e, idx)}
-                children={<LocationMarker title={item.location.display_name} color={item.color} />
+                children={<LocationMarker title={item.location.display_name} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
                 }
                 anchor="bottom"
                 // onDrag={(e) => console.log(e)}

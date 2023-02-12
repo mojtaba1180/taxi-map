@@ -22,7 +22,6 @@ const MapSearchResult = () => {
           return {
             value: item.display_name,
             location: item,
-            color: randomColor()
           }
         } else {
           return i

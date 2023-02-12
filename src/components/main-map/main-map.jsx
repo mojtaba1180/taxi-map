@@ -2,7 +2,6 @@
 import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import qs from "qs";
-import randomColor from 'randomcolor';
 import React, { useEffect, useState } from 'react';
 import { Map, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -103,7 +102,6 @@ const MainMap = ({ children }) => {
                     return arr.map((item, idx) => {
                         if (inputIndexSelected === idx) {
                             return {
-                                color: randomColor(),
                                 value: res.display_name,
                                 location: res
                             }
