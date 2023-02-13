@@ -91,6 +91,18 @@ npm run preview
 | `center`| set map center      | `center=32.66548365103051,51.666493402459196`   |
 | `z`     |  zoom               | `14`                                |
 <br><br><br><br><br>
+
+
+### route: **/map/live**
+
+| name     | detail      | default and example  
+| ------------- | ------------- | --------  |
+| `minute`  | setTime location **(required)**      | `5`   |
+| `top`  | number of location   **(required)**            | `12`   |
+| `center`| set map center      | `center=32.66548365103051,51.666493402459196`   |
+| `z`     |  zoom               | `14`                                |
+<br><br><br><br><br>
+
 # Docker 
 
 pending ...
