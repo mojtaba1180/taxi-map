@@ -72,7 +72,8 @@ export const MapLiveList = styled.ul`
 `;
 
 export const MapLiveListItem = styled.li`
-    background-color: ${GrayLight};
+    background-color:  ${props => props.active ? Primary : GrayLight};
+    color: ${props => props.active ? "#fff" : "#000" };
     margin-bottom: 10px;
     padding: 1em 10px;
     border-radius: ${radius_sm};
@@ -87,11 +88,13 @@ export const MapLiveListItem = styled.li`
     border: 1px solid ${Secondary};
     &:hover {
         background-color: #fff;
+        color:#000
     }
     & .icon {
        border-radius: 100px;
         width: 50px;
         background-color: #fff;
+        color: ${props => props.active ? "#fff" : "#000" };
     }
     &:hover .icon {
         background-color: ${Primary};

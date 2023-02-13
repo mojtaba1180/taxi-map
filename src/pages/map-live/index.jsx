@@ -3,11 +3,12 @@ import { IconChevronLeft, IconSearch } from '@tabler/icons';
 import { useQuery } from '@tanstack/react-query';
 
 import React from 'react';
-import { Marker, useMap } from 'react-map-gl';
+import { useMap } from 'react-map-gl';
 import { useSearchParams } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
 import DirectionLine from '../../components/direction-line';
 import MainMap from '../../components/main-map/main-map';
+import LiveLocationPoint from './component/location-point';
 import { MapLiveContainer, MapLiveList, MapLiveListItem, MapLiveListItemContent, MapLiveListItemTitle, MapLiveRightBox, MapLiveRightBoxTitle, MapLiveSearch, MapLiveSearchInput } from './style/map-live.style';
 
 
@@ -76,6 +77,7 @@ const MapLive = () => {
                                     <MapLiveListItem
                                         key={idx}
                                         onClick={() => setDriverWaypoints(key)}
+                                        active={key === userSelected}
                                     >
                                         <div>
                                             <MapLiveListItemTitle>
@@ -98,13 +100,9 @@ const MapLive = () => {
             >
 
                 {
-                    waypoints && waypoints.map((item, key) => {
+                    waypoints && waypoints.map((item, idx) => {
                         return (
-                            <Marker
-                                key={key}
-                                latitude={item.location[0]}
-                                longitude={item.location[1]}
-                            />
+                            <LiveLocationPoint time={item.time} lat={item.location[0]} lng={item.location[1]} index={idx} startIndex={0} endIndex={waypoints.length - 1} key={idx} />
                         )
                     })
                 }
