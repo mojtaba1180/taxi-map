@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Layer, Source, useMap } from 'react-map-gl';
+import { useMap } from 'react-map-gl';
 import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../../../apis/routing-api';
+import DirectionLine from '../../../../components/direction-line';
 import MapOrderQuery from '../../map-order-query';
 import DirectionPoint from './direction-point';
 const OrderDirections = () => {
@@ -34,38 +35,11 @@ const OrderDirections = () => {
         }
     }, [])
 
-    let GeoJson = {
-        type: 'FeatureCollection',
-        features: [
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString',
-                    coordinates: coordinates
-                }
-            }
-        ]
-    };
-
     return (
         <>
             {
                 locations &&
-                <Source
-                    id="mapOrderLine" type="geojson" data={GeoJson}>
-                    <Layer
-                        id="lineLayer"
-                        type="line"
-                        source="mapOrderLine"
-                        layout={{
-                            "line-join": "round",
-                            "line-cap": "round"
-                        }}
-                        paint={{
-                            "line-color": "rgb(133, 0, 0)",
-                            "line-width": 5
-                        }}
-                    />
+                <DirectionLine coordinates={coordinates} >
                     {
                         locations?.map((item, idx) => {
                             return (
@@ -73,7 +47,8 @@ const OrderDirections = () => {
                             )
                         })
                     }
-                </Source>
+                </DirectionLine>
+
             }
 
         </>

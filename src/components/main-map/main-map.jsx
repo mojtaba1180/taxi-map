@@ -57,10 +57,9 @@ const MainMap = ({ children }) => {
         }))
     }
     const handleDragEnd = () => {
-        setSearchParam({
-            z: center.zoom,
-            center: `${center.lat},${center.lng}`
-        })
+        searchParam.set("z", center.zoom);
+        searchParam.set("center", `${center.lat},${center.lng}`);
+        setSearchParam(searchParam)
         setIsDrag(false);
     }
 

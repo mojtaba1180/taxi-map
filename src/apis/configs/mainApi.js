@@ -22,7 +22,7 @@ MainApi.interceptors.response.use(
     return response.data;
   },
   function (err) {
-    if(err.response.status === 401){
+    if(err?.response.status === 401){
       showNotification({
         color:"red",
         title: "مشکلی رخ داده است",
