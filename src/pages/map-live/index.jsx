@@ -47,7 +47,7 @@ const MapLive = () => {
 
     React.useEffect(() => {
         if (usemap && waypoints && autoFly) {
-            // usemap.flyTo({ center: [waypoints[waypoints.length - 1].location[1], waypoints[waypoints.length - 1].location[0]] });
+            usemap.flyTo({ center: [waypoints[waypoints.length - 1].location[1], waypoints[waypoints.length - 1].location[0]] });
         }
     }, [waypoints, isFetching]);
 
