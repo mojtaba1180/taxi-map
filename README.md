@@ -75,7 +75,8 @@ npm run preview
 | `z`| zoom      | `14`   |
 | `type`| type direction      | default(`car`) - `bike` - `foot`   |
 | `center`| set map center      | `center=32.66548365103051,51.666493402459196`   |
-| `markers`| add marker on map       | `marker=32.662737%2C51.665096%3B32.66188%2C51.665723%3B32.66548365103051,51.666493402459196`   |
+| `marker`| add marker on map       | `marker=32.662737%2C51.665096`   |
+| `marker_name`| set custom name on marker       | `marker_name=example`   |
 | `marker_locked`| lock all markers      | `false`   |
 | `collapsed`| minimize search bar       | `Pending`   |
 
