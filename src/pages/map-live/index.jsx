@@ -1,5 +1,5 @@
 // import { Loader } from '@mantine/core';
-import { IconChevronLeft, IconSearch } from '@tabler/icons';
+import { IconChevronLeft } from '@tabler/icons';
 import { useQuery } from '@tanstack/react-query';
 
 import React from 'react';
@@ -9,7 +9,7 @@ import { RoutingApi } from '../../apis/routing-api';
 import DirectionLine from '../../components/direction-line';
 import MainMap from '../../components/main-map/main-map';
 import LiveLocationPoint from './component/location-point';
-import { MapLiveContainer, MapLiveList, MapLiveListItem, MapLiveListItemContent, MapLiveListItemTitle, MapLiveRightBox, MapLiveRightBoxTitle, MapLiveSearch, MapLiveSearchInput } from './style/map-live.style';
+import { MapLiveContainer, MapLiveList, MapLiveListItem, MapLiveListItemContent, MapLiveListItemTitle, MapLiveRightBox, MapLiveRightBoxTitle } from './style/map-live.style';
 
 
 
@@ -63,12 +63,12 @@ const MapLive = () => {
                     <MapLiveRightBoxTitle >
                         نمایش   زنده مسیر رانندگان
                     </MapLiveRightBoxTitle>
-                    <MapLiveSearch>
+                    {/* <MapLiveSearch>
                         <span>{loading ? <Loader size="sm" /> : <IconSearch />}</span>
                         <MapLiveSearchInput
                             placeholder='جستجو اعضا...'
                         />
-                    </MapLiveSearch>
+                    </MapLiveSearch> */}
                     <MapLiveList>
                         {
                             !isLoading && Object.keys(data.users).map((key, idx) => {
