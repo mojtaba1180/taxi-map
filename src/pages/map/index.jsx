@@ -1,6 +1,6 @@
 import MainMap from '../../components/main-map/main-map';
 // import MapBoxMap from './components/main-map/mapbox-gl';
-import { IconChevronRight, IconMenu2 } from '@tabler/icons';
+import { IconChevronRight, IconMenu2, IconSearch } from '@tabler/icons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLayoutEffect } from 'react';
 import { Marker } from 'react-map-gl';
@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
 import { MainMenuButton } from '../../assets/style/global-style';
 import LocationMarker from '../../components/location-marker/location-marker';
-import { selectAction, selectCenter, selectLocations, selectMarkers, setIsDirection, setLocations } from '../../store/mapSlice';
+import { selectAction, selectCenter, selectLocations, selectMarkers, setIsDirection, setLocations, setSearchBarCollapsed } from '../../store/mapSlice';
 import { Primary } from '../../utils/variables';
 import LayerLineRoute from './component/map-direction/layer-line-route';
 import MapDirection from './component/map-direction/map-direction';
@@ -67,20 +67,22 @@ function Map() {
       {
         action.showSearchBar &&
         <MapTopContainer>
-          <MapTopBox expand={expand}  >
+          <MapTopBox expand={expand} collapsed={action.isSearchBarCollapsed}   >
             <div className='mapbox-row' >
               <MainMenuButton onClick={() => {
                 if (expand) {
-                  if (action.isDirection) {
-                    dispatch(setIsDirection(false));
-                  }
-                  // dispatch(setIsSearch(false));
+                  dispatch(setIsDirection(false));
+                } else if (action.isSearchBarCollapsed) {
+                  dispatch(setSearchBarCollapsed(false))
                 } else {
-                  handleGo()
+                  dispatch(setSearchBarCollapsed(true))
                 }
               }} >
-                {expand ? <IconChevronRight size={35} /> : <IconMenu2 size={40} />}
+                {expand ? <IconChevronRight size={35} /> : action.isSearchBarCollapsed ? <IconSearch /> : <IconMenu2 size={40} />}
               </MainMenuButton>
+
+              {/* framer motion */}
+
               <AnimatePresence mode='wait'>
                 <motion.div
                   key={action.isDirection ? 1 : 2}
@@ -92,18 +94,26 @@ function Map() {
                     duration: 0.1
                   }}
                 >
-                  { // handle show on active direction
-                    !action.isDirection ?
-                      <MapSearchBar showDirection={action.showDirection} />
-                      :
-                      <MapDirectionHeader>
-                        <p>
-                          مسیر یاب
-                        </p>
-                      </MapDirectionHeader>
+                  {
+                    !action.isSearchBarCollapsed &&
+                    (
+                      <>
+                        { // handle show on active direction
+                          !action.isDirection ?
+                            <MapSearchBar showDirection={action.showDirection} />
+                            :
+                            <MapDirectionHeader>
+                              <p>
+                                مسیر یاب
+                              </p>
+                            </MapDirectionHeader>
+                        }
+                      </>
+                    )
                   }
                 </motion.div>
               </AnimatePresence>
+
             </div>
             <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
               <AnimatePresence mode='wait'>

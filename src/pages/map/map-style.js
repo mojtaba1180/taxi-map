@@ -38,14 +38,14 @@ export const MapTopBox = styled.div`
     gap: 1em;
     justify-content: start;
     align-items: center;
-    transition: all .6s;
-
+    transition: all .3s;
     min-height: ${props => props.expand ? "270px": "none"};
-    height: ${props =>  props.expand ? "fit-content" : "4em" };
+    height: ${props =>  props.expand ? "fit-content" : props.collapsed ? "50px" :"4em" };
+    overflow: hidden;
     z-index: 2;
     /* overflow: hidden; */
     @media screen and (min-width:420px){
-        max-width:420px;
+        max-width: ${props => props.collapsed ? "50px": "420px"} ;
     }
      @media screen and (max-width:460px){
         margin-left:1em;
