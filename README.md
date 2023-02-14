@@ -69,7 +69,8 @@ npm run preview
 | name     | detail      | default and example  
 | ------------- | ------------- | --------  |
 | `showDirection`| show direction button      | `false`   |
-| `showSearchBar`| show search bar       | `false`   |
+| `showSearchBar`| show search bar       | `true`   |
+| `collapsed`| collapse search bar       | `false`   |
 | `loc`          | add locations for direction | `loc=32.662737%2C51.665096%3B32.66188%2C51.665723%3B32.66548365103051,51.666493402459196`   |
 | `z`| zoom      | `14`   |
 | `type`| type direction      | default(`car`) - `bike` - `foot`   |

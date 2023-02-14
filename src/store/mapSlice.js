@@ -18,7 +18,7 @@ const initialState = {
     onSearch: false, // handle search loading 
     isSetLocationByMarker: false,
     mobileSearch: false,
-    showSearchBar: false,
+    showSearchBar: true,
     showDirection: true,
     isMarkerLocked: false,
     isSearchBarCollapsed: false,
