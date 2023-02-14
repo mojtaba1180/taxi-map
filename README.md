@@ -78,7 +78,7 @@ npm run preview
 | `marker`| add marker on map       | `marker=32.662737%2C51.665096`   |
 | `marker_name`| set custom name on marker       | `marker_name=example`   |
 | `marker_locked`| lock all markers      | `false`   |
-| `collapsed`| minimize search bar       | `Pending`   |
+| `collapsed`| collapsed search bar       | `false`   |
 
 <br><br><br>
 
