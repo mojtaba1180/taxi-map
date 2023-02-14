@@ -13,7 +13,7 @@ const MapQuery = ({ search, dispatch }) => {
     //query.z center mode query handler in file components/main-map/main-map.jsx 
 
     if (query.type) handleType(query.type, dispatch);
-    if (query.markers) handleMarkers(query, dispatch);
+    if (query.marker) handleMarker(query, dispatch);
     if (query.marker_locked) handleMarkerLocked(parse(query.marker_locked), dispatch);
     if (query.collapsed) handleCollapsed(parse(query.collapsed), dispatch);
 }
@@ -57,7 +57,7 @@ const handleType = (type, dispatch) => {
     }
 }
 
-const handleMarkers = async (query , dispatch) => {
+const handleMarker = async (query , dispatch) => {
    const ArrayMarkers = query.markers.split(";").map(item => item.split(",").map(i => Number(i)))
     let resultMarkers = Promise.all(
         ArrayMarkers.map(async (marker) => {
