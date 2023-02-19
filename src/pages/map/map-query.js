@@ -58,24 +58,23 @@ const handleType = (type, dispatch) => {
 }
 
 const handleMarker = async (query , dispatch) => {
-   const ArrayMarkers = query.markers.split(";").map(item => item.split(",").map(i => Number(i)))
-    let resultMarkers = Promise.all(
-        ArrayMarkers.map(async (marker) => {
-            const { res, err } = await RoutingApi.getLocation({
-                lat: marker[0],
-                lon: marker[1],
-                zoom: 18
-            })
-            return {
-                value: query.marker_name ? query.marker_name:  res?.display_name,
-                location: res,
+    console.log(query.marker)
+    const marker = query.marker.split(",").map(i => Number(i))
+    const { res, err } = await RoutingApi.getLocation({
+        lat: marker[0],
+        lon: marker[1],
+        zoom: 18
+    }) 
+    if(res){
+        await dispatch(setMarkers([
+            {
+                    value: query.marker_name ? query.marker_name:  res?.display_name,
+                    location: res,
             }
-        })
-    )
-
-    await resultMarkers.then(res => {
-        dispatch(setMarkers(res));
-    })
+        ]));
+    }else{
+        dispatch(setMarkers({}))
+    }
 }
 
 const handleMarkerLocked = (marker_locked, dispatch) =>{

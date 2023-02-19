@@ -21,7 +21,7 @@ function Map() {
   const { search } = useLocation();
   const action = useSelector(selectAction);
   const dispatch = useDispatch();
-  const selectedMarkers = useSelector(selectMarkers);
+  const customMarker = useSelector(selectMarkers);
   const { locations } = useSelector(selectLocations);
   const center = useSelector(selectCenter);
   useLayoutEffect(() => {
@@ -161,7 +161,7 @@ function Map() {
         }
 
         {
-          (selectedMarkers.length > 0 && !action.isDirection) && selectedMarkers?.map((item, idx) => {
+          (customMarker.length > 0 && !action.isDirection) && customMarker?.map((item, idx) => {
             if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
               return (
                 <Marker
@@ -178,7 +178,7 @@ function Map() {
         }
 
         {/* Default location marker */}
-        {(!action.isDirection && selectedMarkers.length == 0) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
+        {(!action.isDirection && customMarker.length == 0) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
 
 
 
