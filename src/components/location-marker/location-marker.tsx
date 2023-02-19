@@ -7,10 +7,19 @@ interface Prop {
     centerMode: boolean,
     title: any,
     color?: String,
-    popup?:boolean
+    popup?:boolean,
+    index?:number
 }
-const LocationMarker = ({ isDrag, centerMode, title, color= "#000",popup }: Prop) => {
+const LocationMarker = ({ isDrag, centerMode, title, color= "#000",popup,index }: Prop) => {
+
     const [open, setOpen] = React.useState(popup);
+    React.useEffect(() => {
+        if(index === popup){
+            setOpen(true)
+        }else{
+            setOpen(false)
+        }
+    },[popup])
     return (
 
         <div className={`${!centerMode && "marker-container" }`} >

@@ -2,7 +2,7 @@ import MainMap from '../../components/main-map/main-map';
 // import MapBoxMap from './components/main-map/mapbox-gl';
 import { IconChevronRight, IconMenu2, IconSearch } from '@tabler/icons';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Marker } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -18,6 +18,10 @@ import MapSearchResult from './component/map-search-bar/map-search-result';
 import MapQuery from './map-query';
 import { MapDirectionHeader, MapTopBox, MapTopContainer } from './map-style';
 function Map() {
+
+  const [openMarkerPopup, setOpenMarkerPopup] = useState(false)
+
+
   const { search } = useLocation();
   const action = useSelector(selectAction);
   const dispatch = useDispatch();
@@ -147,12 +151,14 @@ function Map() {
             {
               locations?.map((item, idx) => {
                 if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
+
                   return (
                     <Marker
                       key={idx}
                       draggable={!action.isMarkerLocked}
                       onDragEnd={(e) => handleMarkerDrag(e, idx)}
-                      children={<LocationMarker title={item.location.display_name} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
+                      onClick={() => setOpenMarkerPopup(idx)}
+                      children={<LocationMarker title={item.location.display_name} popup={openMarkerPopup} index={idx} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
                       }
                       anchor="bottom"
                       // onDrag={(e) => console.log(e)}
@@ -186,9 +192,6 @@ function Map() {
         }
 
         {/* Default location marker */}
-        {
-          console.log((!action.isDirection && customMarker.length <= 0), action.isDirection, customMarker)
-        }
         {(!action.isDirection && customMarker.length <= 0) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
 
 
