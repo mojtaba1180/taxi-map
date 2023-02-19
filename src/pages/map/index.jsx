@@ -167,7 +167,7 @@ function Map() {
                 <Marker
                   key={idx}
                   draggable={!action.isMarkerLocked}
-                  children={<LocationMarker title={item.value} />
+                  children={<LocationMarker title={item.value} popup={true} />
                   }
                   anchor="bottom"
                   // onDrag={(e) => console.log(e)}
