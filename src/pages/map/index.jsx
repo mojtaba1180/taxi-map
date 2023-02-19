@@ -141,22 +141,29 @@ function Map() {
         </MapTopContainer>
       }
       <MainMap >
-        <LayerLineRoute />
-        {(action.isDirection) && locations?.map((item, idx) => {
-          if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
-            return (
-              <Marker
-                key={idx}
-                draggable={!action.isMarkerLocked}
-                onDragEnd={(e) => handleMarkerDrag(e, idx)}
-                children={<LocationMarker title={item.location.display_name} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
+        {(action.isDirection) && (
+          <>
+            <LayerLineRoute />
+            {
+              locations?.map((item, idx) => {
+                if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
+                  return (
+                    <Marker
+                      key={idx}
+                      draggable={!action.isMarkerLocked}
+                      onDragEnd={(e) => handleMarkerDrag(e, idx)}
+                      children={<LocationMarker title={item.location.display_name} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
+                      }
+                      anchor="bottom"
+                      // onDrag={(e) => console.log(e)}
+                      latitude={item.location?.lat} longitude={item.location?.lon} />
+                  )
                 }
-                anchor="bottom"
-                // onDrag={(e) => console.log(e)}
-                latitude={item.location?.lat} longitude={item.location?.lon} />
-            )
-          }
-        })
+              })
+            }
+
+          </>
+        )
         }
 
         {
@@ -165,8 +172,10 @@ function Map() {
               return (
                 <Marker
                   key={idx}
-                  draggable={!action.isMarkerLocked}
-                  children={<LocationMarker title={item.value} popup={true} />
+                  draggable={false}
+                  children={<LocationMarker title={item.value} popup={true}
+
+                  />
                   }
                   anchor="bottom"
                   // onDrag={(e) => console.log(e)}
@@ -177,7 +186,10 @@ function Map() {
         }
 
         {/* Default location marker */}
-        {(!action.isDirection && customMarker.length == 0) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
+        {
+          console.log((!action.isDirection && customMarker.length <= 0), action.isDirection, customMarker)
+        }
+        {(!action.isDirection && customMarker.length <= 0) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
 
 
 

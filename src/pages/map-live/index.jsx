@@ -1,4 +1,5 @@
 // import { Loader } from '@mantine/core';
+import { Loader } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons';
 import { useQuery } from '@tanstack/react-query';
 
@@ -69,30 +70,51 @@ const MapLive = () => {
                             placeholder='جستجو اعضا...'
                         />
                     </MapLiveSearch> */}
-                    <MapLiveList>
-                        {
-                            !isLoading && Object.keys(data.users).map((key, idx) => {
 
-                                return (
-                                    <MapLiveListItem
-                                        key={idx}
-                                        onClick={() => setDriverWaypoints(key)}
-                                        active={key === userSelected}
-                                    >
-                                        <div>
-                                            <MapLiveListItemTitle>
-                                                نام:  {data.users[key]?.name}
-                                            </MapLiveListItemTitle>
-                                            <MapLiveListItemContent>
-                                                شماره همراه :  {data.users[key]?.mobile}
-                                            </MapLiveListItemContent>
+                    {
+                        isLoading ? (
+                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }} >
+                                <Loader />
+                            </div>
+                        ) : (
+                            <>
+                                {
+                                    data ? (
+                                        <MapLiveList>
+                                            {
+                                                Object.keys(data.users).map((key, idx) => {
+
+                                                    return (
+                                                        <MapLiveListItem
+                                                            key={idx}
+                                                            onClick={() => setDriverWaypoints(key)}
+                                                            active={key === userSelected}
+                                                        >
+                                                            <div>
+                                                                <MapLiveListItemTitle>
+                                                                    نام:  {data.users[key]?.name}
+                                                                </MapLiveListItemTitle>
+                                                                <MapLiveListItemContent>
+                                                                    شماره همراه :  {data.users[key]?.mobile}
+                                                                </MapLiveListItemContent>
+                                                            </div>
+                                                            <IconChevronLeft className="icon" />
+                                                        </MapLiveListItem>
+                                                    )
+                                                })
+                                            }
+                                        </MapLiveList>
+                                    ) : (
+                                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }} >
+                                            <p> راننده ای وجود ندارد</p>
                                         </div>
-                                        <IconChevronLeft className="icon" />
-                                    </MapLiveListItem>
-                                )
-                            })
-                        }
-                    </MapLiveList>
+                                    )
+
+                                }
+                            </>
+
+                        )
+                    }
                 </MapLiveRightBox>
             </MapLiveContainer>
             <DirectionLine

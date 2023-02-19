@@ -1,6 +1,5 @@
 import { List, ThemeIcon } from '@mantine/core';
 import { IconCurrentLocation } from '@tabler/icons';
-import randomColor from 'randomcolor';
 import { useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAction, selectLocations, selectSearchResult, setLocations, setSearchResult } from '../../../../store/mapSlice';
@@ -41,7 +40,7 @@ const MapSearchResult = () => {
         handleSetLocation(locationsSelector.locations, item, locationsSelector.inputIndexSelected)
       ))
     }
-    usemap.flyTo({ center: [lon, lat] })
+    usemap.flyTo({ center: [lon, lat] });
   }
 
 

@@ -44,7 +44,7 @@ const initialState = {
       }
     ]
   },
-  markers: {},
+  markers: [],
 
 };
 
