@@ -158,7 +158,7 @@ function Map() {
                       draggable={!action.isMarkerLocked}
                       onDragEnd={(e) => handleMarkerDrag(e, idx)}
                       onClick={() => setOpenMarkerPopup(idx)}
-                      children={<LocationMarker title={item.location.display_name} popup={openMarkerPopup} index={idx} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
+                      children={<LocationMarker title={item.location.display_name} currentPopupOpen={openMarkerPopup} index={idx} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
                       }
                       anchor="bottom"
                       // onDrag={(e) => console.log(e)}
@@ -192,7 +192,7 @@ function Map() {
         }
 
         {/* Default location marker */}
-        {(!action.isDirection && customMarker.length <= 0) && <LocationMarker centerMode={true} isDrag={action.isDrag} />}
+        {(!action.isDirection && customMarker.length <= 0) && <LocationMarker centerMode={true} popup={false} isDrag={action.isDrag} />}
 
 
 

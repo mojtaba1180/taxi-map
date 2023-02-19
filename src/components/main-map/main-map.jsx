@@ -115,12 +115,14 @@ const MainMap = ({ children }) => {
                 dispatch(setLocations(handleUpdateLocation()));
                 dispatch(setActions({ chooseOnMap: false }))
             }
-            dispatch(setMarkers([
-                {
-                    value: address,
-                    location: res
-                }
-            ]))
+            if (!action.isMarkerLocked) {
+                dispatch(setMarkers([
+                    {
+                        value: address,
+                        location: res
+                    }
+                ]))
+            }
         }
     }
     return (
