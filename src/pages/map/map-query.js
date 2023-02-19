@@ -77,8 +77,16 @@ const handleMarker = async (query , dispatch) => {
     }
 }
 
-const handleMarkerLocked = (marker_locked, dispatch) =>{
-    if(marker_locked === true || marker_locked === false){ dispatch(setMarkerLocked(marker_locked));}
+const handleMarkerLocked = (m, dispatch) =>{
+    if(m === true || m === false || m === 0 || m === 1){
+        if(m === 0){
+             dispatch(setMarkerLocked(false));
+        } else if(m === 1){
+             dispatch(setMarkerLocked(true));
+        } else {
+            dispatch(setMarkerLocked(m))
+        }
+    }
 }
 
 const handleCollapsed = (collapsed , dispatch) => {

@@ -172,7 +172,7 @@ function Map() {
               return (
                 <Marker
                   key={idx}
-                  draggable={false}
+                  draggable={!action.isMarkerLocked}
                   children={<LocationMarker title={item.value} popup={true}
 
                   />
