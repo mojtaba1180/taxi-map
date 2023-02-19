@@ -60,25 +60,24 @@ function Map() {
     dispatch(setLocations(handleUpdateLocation()));
   }
 
-  const expand = action.isDirection;
 
   return (
     <div >
       {
         action.showSearchBar &&
         <MapTopContainer>
-          <MapTopBox expand={expand} collapsed={action.isSearchBarCollapsed}   >
+          <MapTopBox expand={action.isDirection} collapsed={action.isSearchBarCollapsed}   >
             <div className='mapbox-row' >
               <MainMenuButton onClick={() => {
-                if (expand) {
-                  dispatch(setIsDirection(false));
-                } else if (action.isSearchBarCollapsed) {
+                if (action.isSearchBarCollapsed) {
                   dispatch(setSearchBarCollapsed(false))
+                } else if (action.isDirection) {
+                  dispatch(setIsDirection(false));
                 } else {
                   dispatch(setSearchBarCollapsed(true))
                 }
               }} >
-                {expand ? <IconChevronRight size={35} /> : action.isSearchBarCollapsed ? <IconSearch /> : <IconMenu2 size={40} />}
+                {action.isSearchBarCollapsed ? <IconSearch /> : action.isDirection ? <IconChevronRight size={35} /> : <IconMenu2 size={40} />}
               </MainMenuButton>
 
               {/* framer motion */}

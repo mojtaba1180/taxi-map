@@ -39,8 +39,8 @@ export const MapTopBox = styled.div`
     justify-content: start;
     align-items: center;
     transition: all .3s;
-    min-height: ${props => props.expand ? "270px": "none"};
-    height: ${props =>  props.expand ? "fit-content" : props.collapsed ? "50px" :"4em" };
+    min-height: ${props => props.collapsed ? "50px" : props.expand ?  "270px": "none"};
+    height: ${props => props.collapsed ? "50px" : props.expand ? "fit-content" : "4em" };
     overflow: hidden;
     z-index: 2;
     /* overflow: hidden; */

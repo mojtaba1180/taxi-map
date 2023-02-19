@@ -82,7 +82,10 @@ const handleMarkerLocked = (marker_locked, dispatch) =>{
 }
 
 const handleCollapsed = (collapsed , dispatch) => {
-    if(collapsed === true || collapsed === false) dispatch(setSearchBarCollapsed(collapsed));
+    if(collapsed === true || collapsed === false){
+        dispatch(setSearchBarCollapsed(collapsed))
+        dispatch(setIsDirection(false))
+    };
 }
 
 export default MapQuery
