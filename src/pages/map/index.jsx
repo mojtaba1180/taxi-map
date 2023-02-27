@@ -50,6 +50,7 @@ function Map() {
       return arr.map((item, index) => {
         if (index === idx) {
           return {
+            ...item,
             value: res.display_name,
             location: {
               ...res,
@@ -152,14 +153,14 @@ function Map() {
             {
               locations?.map((item, idx) => {
                 if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
-
+                  console.log(item.drag)
                   return (
                     <Marker
                       key={idx}
-                      draggable={!action.isMarkerLocked}
+                      draggable={item.drag !== null ? item.drag : !action.isMarkerLocked}
                       onDragEnd={(e) => handleMarkerDrag(e, idx)}
                       onClick={() => setOpenMarkerPopup(idx)}
-                      children={<LocationMarker title={item.location.display_name} currentPopupOpen={openMarkerPopup} index={idx} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
+                      children={<LocationMarker title={item.value} currentPopupOpen={openMarkerPopup} index={idx} color={idx === locations.length - 1 ? "#0f9500" : Primary} />
                       }
                       anchor="bottom"
                       // onDrag={(e) => console.log(e)}

@@ -35,12 +35,14 @@ const initialState = {
     locations: [
       {
         value: "",
+        drag:true,
         location: {},
         color: ""
       }
       ,
       {
         value: "",
+        drag:true,
         location: {},
         color: ""
       }

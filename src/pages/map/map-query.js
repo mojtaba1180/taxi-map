@@ -21,11 +21,7 @@ const MapQuery = ({ search, dispatch }) => {
 
 // handle set direction locations and set route direction line
 const handleLoc = async (loc, dispatch) => {
-    const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => {
-        if (Number(i)) {
-            return Number(i)
-        }
-    }));
+    const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => i));
 
     let resultLocation = Promise.all(
         ArrayLocations.map(async (location, idx) => {
@@ -36,7 +32,8 @@ const handleLoc = async (loc, dispatch) => {
             })
             return {
                 color: (idx === ArrayLocations.length - 1) ? "#00ff33" : Primary,
-                value: res.display_name,
+                value: location[3] ? location[3] : res.display_name,
+                drag: location[2] ? NumToBol(location[2]) : null,
                 location: res
             }
         }))
@@ -79,6 +76,7 @@ const handleMarker = async (query, dispatch) => {
         await dispatch(setMarkers([
             {
                 value: query.marker_name ? query.marker_name : res?.display_name,
+
                 location: res,
             }
         ]));
