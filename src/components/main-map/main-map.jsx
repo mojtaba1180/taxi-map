@@ -4,12 +4,12 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import React, { useEffect, useState } from 'react';
 import { Map, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
+import { GetCenterOfDirection } from '../../helpers/get-center-of-direction';
 import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
 import { selectLocations } from './../../store/mapSlice';
 import './main-map.css';
-
 const MainMap = ({ children }) => {
     //redux state
     const center = useSelector(selectCenter);
@@ -18,12 +18,24 @@ const MainMap = ({ children }) => {
     const action = useSelector(selectAction);
     const dispatch = useDispatch();
     //react state
-    const { search } = useLocation();
+
     const [searchParam, setSearchParam] = useSearchParams();
     const { usemap } = useMap();
     const [isDrag, setIsDrag] = useState(false);
     // ANCHOR handle center mode in search query string 
-    const arrayMapCenter = searchParam.get("center") ? searchParam.get("center").split(",").map(i => Number(i)) : null
+
+    const getCenterOfQString = () => {
+        if (searchParam.get("center")) {
+            return searchParam.get("center").split(",").map(i => Number(i))
+        } else
+            if (searchParam.get("loc")) {
+                return GetCenterOfDirection({ points: searchParam.get("loc").split(";").map(item => [item.split(",")[0], item.split(",")[1]]) })
+            } else {
+                return null
+            }
+    }
+
+    const qStringCenter = getCenterOfQString();
 
 
     useEffect(() => {
@@ -130,8 +142,8 @@ const MainMap = ({ children }) => {
             <Map
                 mapLib={maplibreGl}
                 initialViewState={{
-                    longitude: arrayMapCenter ? arrayMapCenter[1] : center.lng,
-                    latitude: arrayMapCenter ? arrayMapCenter[0] : center.lat,
+                    longitude: qStringCenter ? qStringCenter[1] : center.lng,
+                    latitude: qStringCenter ? qStringCenter[0] : center.lat,
                     zoom: searchParam.get("z") ? searchParam.get("z") : center.zoom // handle set zoom on url query string or default zoom
                 }}
                 onClick={(e) => handleClickMap(e)}

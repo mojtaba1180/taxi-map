@@ -28,6 +28,7 @@ function Map() {
   const customMarker = useSelector(selectMarkers);
   const { locations } = useSelector(selectLocations);
   const center = useSelector(selectCenter);
+
   useLayoutEffect(() => {
     //handle query configs
     MapQuery({ search, dispatch });

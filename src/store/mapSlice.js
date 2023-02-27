@@ -4,7 +4,7 @@ const initialState = {
   centerData: {
     lng: 51.33801773402661,
     lat: 35.699864699856676,
-    zoom: 15,
+    zoom: 11,
     detail: {
       name: null,
       state: null,

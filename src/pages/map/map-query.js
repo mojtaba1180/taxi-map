@@ -20,7 +20,12 @@ const MapQuery = ({ search, dispatch }) => {
 
 // handle set direction locations and set route direction line
 const handleLoc = async (loc, dispatch) => {
-    const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => Number(i)))
+    const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => {
+        if(Number(i)){
+            return Number(i)
+        }
+    }));
+   
     let resultLocation = Promise.all(
         ArrayLocations.map(async (location,idx) => {
             const { res, err } = await RoutingApi.getLocation({
@@ -33,19 +38,22 @@ const handleLoc = async (loc, dispatch) => {
                 value: res.display_name,
                 location: res
             }}))
-
+        
     await resultLocation.then(res => {
         dispatch(setIsDirection(true))
         dispatch(setLocations(res));
     })
 
+    let lat_lon = "";
+    await loc.split(";").map(item  => lat_lon = `${lat_lon}${item.split(",")[0]},${item.split(",")[1]};`);
     const { res, err } = await RoutingApi.getRoutingDirection({
-        lat_lon: loc
+        lat_lon: lat_lon.slice(";", -1)
     });
+    
     if (err) console.log(err);
     if (res) {
         res.routes.map(item => {
-            dispatch(addCoordinates(item.geometry.coordinates))
+            dispatch(addCoordinates(item.geometry.coordinates));
         })
     }
 }

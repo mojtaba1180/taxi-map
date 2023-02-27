@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Layer, Source } from 'react-map-gl';
+import { Layer, Source, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { RoutingApi } from '../../../../apis/routing-api';
 import { addCoordinates, selectCoordinates, selectLocations } from '../../../../store/mapSlice';
@@ -7,6 +7,7 @@ const LayerLineRoute = () => {
     const coordinates = useSelector(selectCoordinates);
     const locations = useSelector(selectLocations);
     const dispatch = useDispatch();
+    const { usemap } = useMap();
 
 
     // check location 
