@@ -31,7 +31,7 @@ function Map() {
 
   useLayoutEffect(() => {
     //handle query configs
-    MapQuery({ search, dispatch });
+    MapQuery({ search, dispatch, center });
   }, [])
 
   // set actions on map
@@ -152,8 +152,7 @@ function Map() {
             <LayerLineRoute />
             {
               locations?.map((item, idx) => {
-                if (item.location.hasOwnProperty("lat") && item.location.hasOwnProperty("lon")) {
-                  console.log(item.drag)
+                if (item?.location.hasOwnProperty("lat") && item?.location.hasOwnProperty("lon")) {
                   return (
                     <Marker
                       key={idx}
