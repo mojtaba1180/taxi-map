@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const centerEnv = import.meta.env.VITE_DEFAULT_CENTER.split(",")
+
 const initialState = {
   centerData: {
-    lng: 51.33801773402661,
-    lat: 35.699864699856676,
+    lng: centerEnv ? centerEnv[1] : 51.33801773402661,
+    lat: centerEnv ? centerEnv[0] : 35.699864699856676,
     zoom: 11,
     detail: {
       name: null,

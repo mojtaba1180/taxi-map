@@ -137,6 +137,7 @@ const MainMap = ({ children }) => {
             }
         }
     }
+    console.log(center)
     return (
         <div className="map-wrap">
             <Map

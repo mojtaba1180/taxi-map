@@ -1,5 +1,6 @@
 import qs from 'qs';
 import { RoutingApi } from '../../apis/routing-api';
+import { NumToBol } from '../../helpers/handleNumToBol';
 import { addCoordinates, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
 import { Primary } from '../../utils/variables';
 const MapQuery = ({ search, dispatch }) => {
@@ -21,35 +22,36 @@ const MapQuery = ({ search, dispatch }) => {
 // handle set direction locations and set route direction line
 const handleLoc = async (loc, dispatch) => {
     const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => {
-        if(Number(i)){
+        if (Number(i)) {
             return Number(i)
         }
     }));
-   
+
     let resultLocation = Promise.all(
-        ArrayLocations.map(async (location,idx) => {
+        ArrayLocations.map(async (location, idx) => {
             const { res, err } = await RoutingApi.getLocation({
                 lat: location[0],
                 lon: location[1],
                 zoom: 18
             })
             return {
-                color:(idx === ArrayLocations.length - 1) ? "#00ff33" : Primary ,
+                color: (idx === ArrayLocations.length - 1) ? "#00ff33" : Primary,
                 value: res.display_name,
                 location: res
-            }}))
-        
+            }
+        }))
+
     await resultLocation.then(res => {
         dispatch(setIsDirection(true))
         dispatch(setLocations(res));
     })
 
     let lat_lon = "";
-    await loc.split(";").map(item  => lat_lon = `${lat_lon}${item.split(",")[0]},${item.split(",")[1]};`);
+    await loc.split(";").map(item => lat_lon = `${lat_lon}${item.split(",")[0]},${item.split(",")[1]};`);
     const { res, err } = await RoutingApi.getRoutingDirection({
         lat_lon: lat_lon.slice(";", -1)
     });
-    
+
     if (err) console.log(err);
     if (res) {
         res.routes.map(item => {
@@ -60,48 +62,38 @@ const handleLoc = async (loc, dispatch) => {
 
 // handle set direction type
 const handleType = (type, dispatch) => {
-    if(type === "car"|| type === "bike" || type === "foot"){
+    if (type === "car" || type === "bike" || type === "foot") {
         dispatch(setLocationsRoutedType(type))
     }
 }
 
-const handleMarker = async (query , dispatch) => {
+const handleMarker = async (query, dispatch) => {
     console.log(query.marker)
     const marker = query.marker.split(",").map(i => Number(i))
     const { res, err } = await RoutingApi.getLocation({
         lat: marker[0],
         lon: marker[1],
         zoom: 18
-    }) 
-    if(res){
+    })
+    if (res) {
         await dispatch(setMarkers([
             {
-                    value: query.marker_name ? query.marker_name:  res?.display_name,
-                    location: res,
+                value: query.marker_name ? query.marker_name : res?.display_name,
+                location: res,
             }
         ]));
-    }else{
+    } else {
         dispatch(setMarkers({}))
     }
 }
 
-const handleMarkerLocked = (m, dispatch) =>{
-    if(m === true || m === false || m === 0 || m === 1){
-        if(m === 0){
-             dispatch(setMarkerLocked(false));
-        } else if(m === 1){
-             dispatch(setMarkerLocked(true));
-        } else {
-            dispatch(setMarkerLocked(m))
-        }
-    }
+const handleMarkerLocked = (m, dispatch) => {
+    dispatch(setMarkerLocked(NumToBol(m)));
 }
 
-const handleCollapsed = (collapsed , dispatch) => {
-    if(collapsed === true || collapsed === false){
-        dispatch(setSearchBarCollapsed(collapsed))
-        dispatch(setIsDirection(false))
-    };
+const handleCollapsed = (collapsed, dispatch) => {
+    dispatch(setSearchBarCollapsed(NumToBol(collapsed)));
+    dispatch(setIsDirection(false));
 }
 
 export default MapQuery
