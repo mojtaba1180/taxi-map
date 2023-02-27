@@ -15,6 +15,7 @@ VITE_OSRM_URL= "https://osrm.azadiweb.ir"
 VITE_MAP_STYLE= "https://tiles.raah.ir/dynamic/new_style_preview.json"
 VITE_API_URL= "https://bolvar.api.netserv.ir"
 VITE_BASE_URL="/ui"
+VITE_DEFAULT_CENTER="32.65906869980235,51.66687495218116"
 
 ```
 
