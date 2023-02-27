@@ -93,6 +93,7 @@ npm run preview
 | `order_app_id`| filter by peyk id type: `number`        | `10001`   |
 | `center`| set map center      | `center=32.66548365103051,51.666493402459196`   |
 | `z`     |  zoom               | `14`                                |
+| `auth_key`     |  token               |  `String`                                |
 <br><br><br><br><br>
 
 
@@ -103,7 +104,8 @@ npm run preview
 | `minute`  | setTime location **(required)**      | `5`   |
 | `top`  | number of location   **(required)**            | `12`   |
 | `center`| set map center      | `center=32.66548365103051,51.666493402459196`   |
-| `z`     |  zoom               | `14`                                |
+| `z`     |  zoom               | `14`  
+| `auth_key`     |  token               |  `String`                               |
 <br><br><br><br><br>
 
 # Docker 
