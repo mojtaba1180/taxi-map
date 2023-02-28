@@ -64,6 +64,9 @@ const handleLoc = async (loc, dispatch,center) => {
                        zoom: center.zoom,
                        name: location[3] ? location[3] : res.display_name,
                        address: address,
+                   },11,{
+                    lat:center.lat,
+                    lng:center.lng
                    });
                 }
             
