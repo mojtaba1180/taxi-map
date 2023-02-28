@@ -8,32 +8,32 @@ const MapQuery = ({ search, dispatch, center }) => {
     const parse = (q) => JSON.parse(q)
     if (query.showDirection) dispatch(setShowDirection(parse(query.showDirection)));
     if (query.showSearchBar) dispatch(setShowSearchBar(parse(query.showSearchBar)));
-    if (query.loc) handleLoc(query.loc, dispatch,center);
+    if (query.loc) handleLoc(query.loc, dispatch, center);
 
     //query.center center mode query handler in file components/main-map/main-map.jsx 
     //query.z center mode query handler in file components/main-map/main-map.jsx 
-    
+
     if (query.type) handleType(query.type, dispatch);
     if (query.marker) handleMarker(query, dispatch);
     if (query.marker_locked) handleMarkerLocked(parse(query.marker_locked), dispatch);
     if (query.collapsed) handleCollapsed(parse(query.collapsed), dispatch);
 }
 
-    const Cef = (action, d, c, z) => {
-        if ((typeof CefSharp) === 'undefined') return;
-        const zoom = z || 11
-        const center = c || {lat:0,lng:0} ;
-        const data = d || {};
-        CefSharp.PostMessage(JSON.stringify({
-            action: action,
-            data: data,
-            zoom: zoom,
-            lat: center.lat,
-            lng: center.lng
-        }));
-    }
+const Cef = (action, d, c, z) => {
+    if ((typeof CefSharp) === 'undefined') return;
+    const zoom = z || 11
+    const center = c || { lat: 0, lng: 0 };
+    const data = d || {};
+    CefSharp.PostMessage(JSON.stringify({
+        action: action,
+        data: data,
+        zoom: zoom,
+        lat: center.lat,
+        lng: center.lng
+    }));
+}
 // handle set direction locations and set route direction line
-const handleLoc = async (loc, dispatch,center) => {
+const handleLoc = async (loc, dispatch, center) => {
     const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => i));
     let resultLocation = Promise.all(
         ArrayLocations.map(async (location, idx) => {
@@ -43,7 +43,8 @@ const handleLoc = async (loc, dispatch,center) => {
                 zoom: 18
             })
 
-            if(res){
+            debugger;
+            if (res) {
                 const arr = res.display_name.split(",").reverse();
                 let address = "";
                 arr.forEach(function (str) {
@@ -56,16 +57,27 @@ const handleLoc = async (loc, dispatch,center) => {
                     if (address !== '') address = address + '، ';
                     address = address + str;
                 });
-                 
-                Cef('route', {
-                    lat: center.lat,
-                    lng: center.lng,
-                    zoom: center.zoom,
-                    name: location[3] ? location[3] : res.display_name,
-                    address: address,
-                }, center,center.zoom);
-              
-            
+                let lat_lon = "";
+                await loc.split(";").map(item => lat_lon = `${lat_lon}${item.split(",")[0]},${item.split(",")[1]};`);
+                const Direction = await RoutingApi.getRoutingDirection({
+                    lat_lon: lat_lon.slice(";", -1)
+                });
+                if (Direction.err) console.log(err);
+                if (Direction.res) {
+                    Direction.res.routes.map(item => {
+                        dispatch(addCoordinates(item.geometry.coordinates));
+                        Cef('route', {
+                            lat: center.lat,
+                            lng: center.lng,
+                            zoom: center.zoom,
+                            name: location[3] ? location[3] : res.display_name,
+                            address: address,
+                            waypoints: Direction.res.waypoints,
+                            summary: address,
+                        }, center, center.zoom);
+                    })
+                }
+
                 return {
                     color: (idx === ArrayLocations.length - 1) ? "#00ff33" : Primary,
                     value: location[3] ? location[3] : res.display_name,
@@ -79,26 +91,6 @@ const handleLoc = async (loc, dispatch,center) => {
         dispatch(setIsDirection(true))
         dispatch(setLocations(res));
     })
-
-    let lat_lon = "";
-    await loc.split(";").map(item => lat_lon = `${lat_lon}${item.split(",")[0]},${item.split(",")[1]};`);
-    const { res, err } = await RoutingApi.getRoutingDirection({
-        lat_lon: lat_lon.slice(";", -1)
-    });
-
-    if (err) console.log(err);
-    if (res) {
-        console.log(res)
-        res.routes.map(item => {
-            dispatch(addCoordinates(item.geometry.coordinates));
-            Cef('route', {
-                lat: center.lat,
-                lng: center.lng,
-                zoom: center.zoom,
-                waypoints: res.waypoints
-            });
-        })
-    }
 }
 
 // handle set direction type
