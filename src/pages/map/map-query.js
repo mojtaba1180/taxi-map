@@ -18,10 +18,10 @@ const MapQuery = ({ search, dispatch,center }) => {
     if (query.collapsed) handleCollapsed(parse(query.collapsed), dispatch);
 }
 
-const Cef = (action, d, z, c) => {
+    const Cef = (action, d, z, c) => {
         if ((typeof CefSharp) === 'undefined') return;
         const zoom = z || 11
-        const center = c ;
+        const center = c || {lat:0,lng:0} ;
         const data = d || {};
         CefSharp.PostMessage(JSON.stringify({
             action: action,
@@ -56,19 +56,15 @@ const handleLoc = async (loc, dispatch,center) => {
                     if (address !== '') address = address + '، ';
                     address = address + str;
                 });
-                
-                if(center){
-                    Cef('route', {
-                       lat: center.lat,
-                       lng: center.lng,
-                       zoom: center.zoom,
-                       name: location[3] ? location[3] : res.display_name,
-                       address: address,
-                   },11,{
-                    lat:center.lat,
-                    lng:center.lng
-                   });
-                }
+                 
+                Cef('route', {
+                    lat: center.lat,
+                    lng: center.lng,
+                    zoom: center.zoom,
+                    name: location[3] ? location[3] : res.display_name,
+                    address: address,
+                });
+              
             
                 return {
                     color: (idx === ArrayLocations.length - 1) ? "#00ff33" : Primary,
