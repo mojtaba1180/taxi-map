@@ -43,7 +43,7 @@ const handleLoc = async (loc, dispatch, center) => {
                 zoom: 18
             })
 
-            debugger;
+         
             if (res) {
                 const arr = res.display_name.split(",").reverse();
                 let address = "";
