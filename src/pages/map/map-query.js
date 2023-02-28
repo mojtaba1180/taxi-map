@@ -3,22 +3,23 @@ import { RoutingApi } from '../../apis/routing-api';
 import { NumToBol } from '../../helpers/handleNumToBol';
 import { addCoordinates, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
 import { Primary } from '../../utils/variables';
-const MapQuery = ({ search, dispatch,center }) => {
+const MapQuery = ({ search, dispatch, center }) => {
     const query = qs.parse(search.split("?")[1]);
     const parse = (q) => JSON.parse(q)
     if (query.showDirection) dispatch(setShowDirection(parse(query.showDirection)));
     if (query.showSearchBar) dispatch(setShowSearchBar(parse(query.showSearchBar)));
     if (query.loc) handleLoc(query.loc, dispatch,center);
+
     //query.center center mode query handler in file components/main-map/main-map.jsx 
     //query.z center mode query handler in file components/main-map/main-map.jsx 
-
+    
     if (query.type) handleType(query.type, dispatch);
     if (query.marker) handleMarker(query, dispatch);
     if (query.marker_locked) handleMarkerLocked(parse(query.marker_locked), dispatch);
     if (query.collapsed) handleCollapsed(parse(query.collapsed), dispatch);
 }
 
-    const Cef = (action, d, z, c) => {
+    const Cef = (action, d, c, z) => {
         if ((typeof CefSharp) === 'undefined') return;
         const zoom = z || 11
         const center = c || {lat:0,lng:0} ;
@@ -34,7 +35,6 @@ const MapQuery = ({ search, dispatch,center }) => {
 // handle set direction locations and set route direction line
 const handleLoc = async (loc, dispatch,center) => {
     const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => i));
-    
     let resultLocation = Promise.all(
         ArrayLocations.map(async (location, idx) => {
             const { res, err } = await RoutingApi.getLocation({
@@ -63,7 +63,7 @@ const handleLoc = async (loc, dispatch,center) => {
                     zoom: center.zoom,
                     name: location[3] ? location[3] : res.display_name,
                     address: address,
-                });
+                }, center,center.zoom);
               
             
                 return {
