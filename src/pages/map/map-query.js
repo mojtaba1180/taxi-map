@@ -1,7 +1,7 @@
 import qs from 'qs';
 import { RoutingApi } from '../../apis/routing-api';
 import { NumToBol } from '../../helpers/handleNumToBol';
-import { addCoordinates, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
+import { addCoordinates, setIsDirection, setLastDirection, setLastLocation, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
 import { Primary } from '../../utils/variables';
 const MapQuery = ({ search, dispatch, center }) => {
     const query = qs.parse(search.split("?")[1]);
@@ -18,20 +18,6 @@ const MapQuery = ({ search, dispatch, center }) => {
     if (query.marker_locked) handleMarkerLocked(parse(query.marker_locked), dispatch);
     if (query.collapsed) handleCollapsed(parse(query.collapsed), dispatch);
 }
-
-const Cef = (action, d, c, z) => {
-    if ((typeof CefSharp) === 'undefined') return;
-    const zoom = z || 11
-    const center = c || { lat: 0, lng: 0 };
-    const data = d || {};
-    CefSharp.PostMessage(JSON.stringify({
-        action: action,
-        data: data,
-        zoom: zoom,
-        lat: center.lat,
-        lng: center.lng
-    }));
-}
 // handle set direction locations and set route direction line
 const handleLoc = async (loc, dispatch, center) => {
     const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => i));
@@ -45,18 +31,7 @@ const handleLoc = async (loc, dispatch, center) => {
 
          
             if (res) {
-                const arr = res.display_name.split(",").reverse();
-                let address = "";
-                arr.forEach(function (str) {
-                    str = str.trim();
-                    if (str.match(/^ایران$/)) return;
-                    if (str.match(/^\d{5}-\d{5}$/)) return;
-                    if (str.match(/^استان .*$/)) return;
-                    if (str.match(/^شهرستان .*$/)) return;
-                    if (str.match(/^بخش .*$/)) return;
-                    if (address !== '') address = address + '، ';
-                    address = address + str;
-                });
+                dispatch(setLastLocation(res)); //set changes in global state after request 
                 let lat_lon = "";
                 await loc.split(";").map(item => lat_lon = `${lat_lon}${item.split(",")[0]},${item.split(",")[1]};`);
                 const Direction = await RoutingApi.getRoutingDirection({
@@ -66,15 +41,7 @@ const handleLoc = async (loc, dispatch, center) => {
                 if (Direction.res) {
                     Direction.res.routes.map(item => {
                         dispatch(addCoordinates(item.geometry.coordinates));
-                        Cef('route', {
-                            lat: center.lat,
-                            lng: center.lng,
-                            zoom: center.zoom,
-                            name: location[3] ? location[3] : res.display_name,
-                            address: address,
-                            waypoints: Direction.res.waypoints,
-                            summary: address,
-                        }, center, center.zoom);
+                        dispatch(setLastDirection(Direction.res)); //set changes in global state after request 
                     })
                 }
 
@@ -116,6 +83,7 @@ const handleMarker = async (query, dispatch) => {
                 location: res,
             }
         ]));
+        dispatch(setLastLocation(res))
     } else {
         dispatch(setMarkers({}))
     }

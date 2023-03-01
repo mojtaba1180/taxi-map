@@ -49,7 +49,10 @@ const initialState = {
     ]
   },
   markers: [],
-
+  mapLastRequest:{ // updated in  any request from routing-api
+    lastLocation:null,
+    lastDirection:null
+  }
 };
 
 
@@ -130,6 +133,12 @@ export const counterSlice = createSlice({
     },
     setSearchBarCollapsed: (state, action) => {
       state.actions.isSearchBarCollapsed = action.payload
+    },
+    setLastLocation: (state, action) => { // set res last location after request api 
+      state.mapLastRequest.lastLocation = action.payload
+    },
+    setLastDirection: (state,action) => {  // set res last direction after request api 
+      state.mapLastRequest.lastDirection = action.payload
     }
   },
 });
@@ -151,7 +160,9 @@ export const { mapCenter,
   setMarkers,
   setMarkerLocked,
   setSearchBarCollapsed,
-  setActions
+  setActions,
+  setLastLocation,
+  setLastDirection
 } = counterSlice.actions;
 
 
@@ -174,5 +185,7 @@ export const selectSearchResult = (state) => state.mapStore.search.searchResult
 export const selectLocations = (state) => state.mapStore.locations
 
 export const selectMarkers = (state) => state.mapStore.markers
+
+export const selectMapLastRequest = (state) => state.mapStore.mapLastRequest
 
 export default counterSlice.reducer;

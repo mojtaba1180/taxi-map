@@ -6,17 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
 
+import { useMap } from 'react-map-gl';
 import LocationMarker from '../../components/location-marker/location-marker';
-import { selectAction, selectCenter, selectLocations, selectMarkers, setLocations } from '../../store/mapSlice';
+import { selectAction, selectCenter, selectLocations, selectMarkers, setLastLocation, setLocations } from '../../store/mapSlice';
 import { Primary } from '../../utils/variables';
 import LayerLineRoute from './component/map-direction/layer-line-route';
-
 import MapQuery from './map-query';
 
-
 const MapContainer = () => {
-
-  const [openMarkerPopup, setOpenMarkerPopup] = useState(false)
 
   const { search } = useLocation();
   const action = useSelector(selectAction);
@@ -25,42 +22,66 @@ const MapContainer = () => {
   const { locations } = useSelector(selectLocations);
   const center = useSelector(selectCenter);
 
+  const [openMarkerPopup, setOpenMarkerPopup] = useState(false)
+
+
+  const usemap = useMap();
+
   useLayoutEffect(() => {
     //handle query configs
     MapQuery({ search, dispatch, center });
   }, [])
+
+
+  const Cef = (action, d, c, z) => {
+    if ((typeof CefSharp) === 'undefined') return;
+    const zoom = z || center.zoom
+    const center = c || center;
+    const data = d || {};
+    CefSharp.PostMessage(JSON.stringify({
+      action: action,
+      data: data,
+      zoom: zoom,
+      lat: center.lat,
+      lng: center.lng
+    }));
+  }
+
 
   // set actions on map
   const handleMarkerDrag = async (event, idx) => {
     const lng = event.lngLat.lng;
     const lat = event.lngLat.lat;
     const zoom = parseInt(center.zoom);
-    const { res, err } = await RoutingApi.getLocation({
-      lat: lat,
-      lon: lng,
-      zoom
-    });
+    const { res, err } = await RoutingApi.getLocation({ lat: lat, lon: lng, zoom });
+
     if (err) return;
-    let arr = [...locations];
-    const handleUpdateLocation = () => {
-      return arr.map((item, index) => {
-        if (index === idx) {
-          return {
-            ...item,
-            value: res.display_name,
-            location: {
-              ...res,
-              lat,
-              lon: lng
+    if (res) {
+
+      let arr = [...locations];
+      const handleUpdateLocation = () => {
+        return arr.map((item, index) => {
+          if (index === idx) {
+            return {
+              ...item,
+              value: res.display_name,
+              location: {
+                ...res,
+                lat,
+                lon: lng
+              }
             }
+          } else {
+            return item
           }
-        } else {
-          return item
-        }
-      })
+        })
+      }
+      dispatch(setLocations(handleUpdateLocation()));
+      dispatch(setLastLocation(res))
     }
-    dispatch(setLocations(handleUpdateLocation()));
   }
+
+
 
 
   return (

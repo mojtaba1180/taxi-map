@@ -1,27 +1,13 @@
 import React, { useEffect } from 'react';
-import { Layer, Source, useMap } from 'react-map-gl';
+import { Layer, Source } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { RoutingApi } from '../../../../apis/routing-api';
-import { addCoordinates, selectCoordinates, selectLocations } from '../../../../store/mapSlice';
+import { addCoordinates, selectCoordinates, selectLocations, setLastDirection } from '../../../../store/mapSlice';
 const LayerLineRoute = () => {
     const coordinates = useSelector(selectCoordinates);
     const locations = useSelector(selectLocations);
     const dispatch = useDispatch();
-    const { usemap } = useMap();
 
-    const Cef = (action, d, z, c) => {
-        if ((typeof CefSharp) === 'undefined') return;
-        const zoom = z || usemap.getZoom();
-        const center = c || usemap.getCenter();
-        const data = d || {};
-        CefSharp.PostMessage(JSON.stringify({
-            action: action,
-            data: data,
-            zoom: zoom,
-            lat: center.lat,
-            lng: center.lng
-        }));
-    }
     // check location 
     const locationsReady = async () => {
         let arr = []
@@ -44,13 +30,7 @@ const LayerLineRoute = () => {
                 });
                 if (err) console.log(err);
                 if (res) {
-
-                    Cef('route', {
-                        zoom: usemap.getZoom(),
-                        lat: usemap.getCenter().lat,
-                        lng: usemap.getCenter().lng,
-
-                    });
+                    dispatch(setLastDirection(res));
                     res.routes.map(item => {
                         dispatch(addCoordinates(item.geometry.coordinates))
                     })

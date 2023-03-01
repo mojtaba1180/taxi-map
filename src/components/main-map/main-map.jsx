@@ -6,16 +6,19 @@ import { Map, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
+import AddressStringFilter from '../../helpers/addressStringFilter';
 import { GetCenterOfDirection } from '../../helpers/get-center-of-direction';
-import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
+import { mapCenter, selectAction, selectCenter, selectMapLastRequest, setActions, setDrag, setLastLocation, setLocations, setMarkers } from '../../store/mapSlice';
 import { selectLocations } from './../../store/mapSlice';
 import './main-map.css';
 const MainMap = ({ children }) => {
     //redux state
     const center = useSelector(selectCenter);
     const { locations, inputIndexSelected } = useSelector(selectLocations);
+    const { lastLocation, lastDirection } = useSelector(selectMapLastRequest);
     const mapStyle = import.meta.env.VITE_MAP_STYLE;
     const action = useSelector(selectAction);
+    // const coordinates = useSelector(selectCoordinates);
     const dispatch = useDispatch();
     //react state
 
@@ -37,25 +40,43 @@ const MainMap = ({ children }) => {
 
     const qStringCenter = getCenterOfQString();
 
-
-    useEffect(() => {
-        dispatch(setDrag(isDrag))
-    }, [isDrag]);
-
     // ANCHOR Csharp function pass data to Csharp app  
     const Cef = (action, d, z, c) => {
         if ((typeof CefSharp) === 'undefined') return;
-        const zoom = z || usemap.getZoom();
-        const center = c || usemap.getCenter();
+        const zoom = z || usemap.getZoom() || center.zoom
+        const _center = c || usemap.getCenter() || center
         const data = d || {};
         CefSharp.PostMessage(JSON.stringify({
             action: action,
             data: data,
             zoom: zoom,
-            lat: center.lat,
-            lng: center.lng
+            lat: _center.lat,
+            lng: _center.lng
         }));
     }
+
+
+    useEffect(() => { /// call Cef after update locations and direction
+        if (lastLocation !== null && lastDirection !== null) {
+            const address = AddressStringFilter(lastLocation.display_name);
+            Cef('route', {
+                lat: center.lat,
+                lng: center.lng,
+                zoom: center.zoom,
+                name: lastLocation.display_name || "",
+                address: address || "",
+                waypoints: lastDirection.waypoints || {},
+                summary: address || "",
+            });
+        }
+    }, [lastLocation, lastDirection])
+
+
+    useEffect(() => {
+        dispatch(setDrag(isDrag))
+    }, [isDrag]);
+
+
 
     const handleDragStart = () => {
         setIsDrag(true);
@@ -86,25 +107,12 @@ const MainMap = ({ children }) => {
         });
         if (err) return;
         if (res) {
-
-            const arr = res.display_name.split(",").reverse();
-            let address = "";
-            arr.forEach(function (str) {
-                str = str.trim();
-                if (str.match(/^ایران$/)) return;
-                if (str.match(/^\d{5}-\d{5}$/)) return;
-                if (str.match(/^استان .*$/)) return;
-                if (str.match(/^شهرستان .*$/)) return;
-                if (str.match(/^بخش .*$/)) return;
-                if (address !== '') address = address + '، ';
-                address = address + str;
-            });
             Cef('point', {
                 zoom,
                 lat: res.lat,
                 lng: res.lon,
                 name: res.display_name,
-                address: address,
+                address: AddressStringFilter(res.display_name),
                 osm_type: res.osm_type
             });
             if (action.chooseOnMap) {
@@ -126,11 +134,12 @@ const MainMap = ({ children }) => {
                 }
                 dispatch(setLocations(handleUpdateLocation()));
                 dispatch(setActions({ chooseOnMap: false }))
+                dispatch(setLastLocation(res))
             }
             if (!action.isMarkerLocked) {
                 dispatch(setMarkers([
                     {
-                        value: address,
+                        value: AddressStringFilter(res.display_name),
                         location: res
                     }
                 ]))
