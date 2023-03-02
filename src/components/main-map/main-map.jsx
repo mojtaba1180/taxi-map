@@ -66,7 +66,10 @@ const MainMap = ({ children }) => {
                 name: lastLocation.display_name || "",
                 address: address || "",
                 waypoints: lastDirection.waypoints || {},
-                summary: address || "",
+                summary: {
+                    totalDistance: lastDirection.distance || 0,
+                    totalTime: lastDirection.duration || 0,
+                },
             });
         }
     }, [lastLocation, lastDirection])
