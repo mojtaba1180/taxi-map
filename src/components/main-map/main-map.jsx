@@ -58,6 +58,8 @@ const MainMap = ({ children }) => {
 
     useEffect(() => { /// call Cef after update locations and direction
         if (lastLocation !== null && lastDirection !== null) {
+            if (lastDirection.routes?.length == 0) return;
+            const route = lastDirection.routes[0];
             const address = AddressStringFilter(lastLocation.display_name);
             Cef('route', {
                 lat: center.lat,
@@ -67,8 +69,10 @@ const MainMap = ({ children }) => {
                 address: address || "",
                 waypoints: lastDirection.waypoints || {},
                 summary: {
-                    totalDistance: lastDirection.distance || 0,
-                    totalTime: lastDirection.duration || 0,
+                    totalDistance: route.distance || 0,
+                    totalTime: route.duration || 0,
+                    weight: route.weight || 0,
+                    weightName: route.weight_name || "",
                 },
             });
         }
