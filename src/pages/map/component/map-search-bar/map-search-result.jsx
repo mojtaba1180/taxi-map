@@ -13,13 +13,13 @@ const MapSearchResult = () => {
   const dispatch = useDispatch();
 
   const handleSetLocation = (loc, item, index) => {
-
+    console.log(loc)
     let arr = [...loc]
     if (index !== null && !action.isDrag) {
       return arr.map((i, idx) => {
         if (idx === index) {
           return {
-            ...item,
+            drag: true,
             value: item.display_name,
             location: item,
           }
