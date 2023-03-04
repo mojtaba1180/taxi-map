@@ -34,7 +34,6 @@ const MapDirection = () => {
             ), value: 'foot'
         },
     ]
-
     return (
         <MapDirectionContainer>
             <div style={{ height: "4em", width: "100%" }} >
@@ -90,7 +89,8 @@ const MapDirection = () => {
                                         ...locations.locations,
                                         {
                                             value: "",
-                                            location: {}
+                                            location: {},
+                                            drag: true
                                         }
                                     ]
                                 ))

@@ -98,7 +98,7 @@ const MapContainer = () => {
                 return (
                   <Marker
                     key={idx}
-                    draggable={item.drag !== null ? item.drag : !action.isMarkerLocked}
+                    draggable={!action.isMarkerLocked || item.drag !== null ? item.drag : true}
                     onDragEnd={(e) => handleMarkerDrag(e, idx)}
                     onClick={() => setOpenMarkerPopup(idx)}
                     children={<LocationMarker title={item.value} currentPopupOpen={openMarkerPopup} index={idx} color={idx === locations.length - 1 ? "#0f9500" : Primary} />

@@ -44,7 +44,6 @@ const handleLoc = async (loc, dispatch, center) => {
                         dispatch(setLastDirection(Direction.res)); //set changes in global state after request 
                     })
                 }
-
                 return {
                     color: (idx === ArrayLocations.length - 1) ? "#00ff33" : Primary,
                     value: location[3] ? location[3] : res.display_name,

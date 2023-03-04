@@ -19,6 +19,7 @@ const MapSearchResult = () => {
       return arr.map((i, idx) => {
         if (idx === index) {
           return {
+            ...item,
             value: item.display_name,
             location: item,
           }

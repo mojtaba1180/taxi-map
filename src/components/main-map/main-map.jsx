@@ -131,6 +131,7 @@ const MainMap = ({ children }) => {
                     return arr.map((item, idx) => {
                         if (inputIndexSelected === idx) {
                             return {
+                                ...item,
                                 value: res.display_name,
                                 location: res
                             }
