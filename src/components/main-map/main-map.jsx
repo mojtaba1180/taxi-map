@@ -60,7 +60,7 @@ const MainMap = ({ children }) => {
         if (lastLocation !== null && lastDirection !== null) {
             if (lastDirection.routes?.length == 0) return;
             const route = lastDirection.routes[0];
-            const address = AddressStringFilter(lastLocation.display_name);
+            const address = AddressStringFilter(lastLocation.display_name || "");
             Cef('route', {
                 lat: center.lat,
                 lng: center.lng,
