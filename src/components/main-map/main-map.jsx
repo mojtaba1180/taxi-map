@@ -1,53 +1,89 @@
 
 import maplibreGl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import qs from "qs";
-import randomColor from 'randomcolor';
 import React, { useEffect, useState } from 'react';
 import { Map, useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import env from '../../../env.json';
+import { useSearchParams } from 'react-router-dom';
 import { RoutingApi } from '../../apis/routing-api';
-import { mapCenter, selectAction, selectCenter, setActions, setDrag, setLocations, setMarkers } from '../../store/mapSlice';
+import AddressStringFilter from '../../helpers/addressStringFilter';
+import { GetCenterOfDirection } from '../../helpers/get-center-of-direction';
+import { mapCenter, selectAction, selectCenter, selectMapLastRequest, setActions, setDrag, setLastLocation, setLocations, setMarkers } from '../../store/mapSlice';
 import { selectLocations } from './../../store/mapSlice';
 import './main-map.css';
-
 const MainMap = ({ children }) => {
     //redux state
     const center = useSelector(selectCenter);
     const { locations, inputIndexSelected } = useSelector(selectLocations);
-    const mapStyle = env.VITE_MAP_STYLE;
+    const { lastLocation, lastDirection } = useSelector(selectMapLastRequest);
+    const mapStyle = import.meta.env.VITE_MAP_STYLE;
     const action = useSelector(selectAction);
+    // const coordinates = useSelector(selectCoordinates);
     const dispatch = useDispatch();
     //react state
-    const { search } = useLocation();
+
+    const [searchParam, setSearchParam] = useSearchParams();
     const { usemap } = useMap();
     const [isDrag, setIsDrag] = useState(false);
-
     // ANCHOR handle center mode in search query string 
-    const query = qs.parse(search.split("?")[1]);
-    const arrayMapCenter = query.center ? query.center.split(",").map(i => Number(i)) : null
+
+    const getCenterOfQString = () => {
+        if (searchParam.get("center")) {
+            return searchParam.get("center").split(",").map(i => Number(i))
+        } else
+            if (searchParam.get("loc")) {
+                return GetCenterOfDirection({ points: searchParam.get("loc").split(";").map(item => [item.split(",")[0], item.split(",")[1]]) })
+            } else {
+                return null
+            }
+    }
+
+    const qStringCenter = getCenterOfQString();
+
+    // ANCHOR Csharp function pass data to Csharp app  
+    const Cef = (action, d, z, c) => {
+        if ((typeof CefSharp) === 'undefined') return;
+        const zoom = z || usemap.getZoom() || center.zoom
+        const _center = c || usemap.getCenter() || center
+        const data = d || {};
+        CefSharp.PostMessage(JSON.stringify({
+            action: action,
+            data: data,
+            zoom: zoom,
+            lat: _center.lat,
+            lng: _center.lng
+        }));
+    }
+
+
+    useEffect(() => { /// call Cef after update locations and direction
+        if (lastLocation !== null && lastDirection !== null) {
+            if (lastDirection.routes?.length == 0) return;
+            const route = lastDirection.routes[0];
+            const address = AddressStringFilter(lastLocation.display_name || "");
+            Cef('route', {
+                lat: center.lat,
+                lng: center.lng,
+                zoom: center.zoom,
+                name: lastLocation.display_name || "",
+                address: address || "",
+                waypoints: lastDirection.waypoints || {},
+                summary: {
+                    totalDistance: route.distance || 0,
+                    totalTime: route.duration || 0,
+                    weight: route.weight || 0,
+                    weightName: route.weight_name || "",
+                },
+            });
+        }
+    }, [lastLocation, lastDirection])
 
 
     useEffect(() => {
         dispatch(setDrag(isDrag))
     }, [isDrag]);
 
-    // ANCHOR Csharp function pass data to Csharp app  
-    const Cef = (action, d, z, c) => {
-        if ((typeof CefSharp) === 'undefined') return;
-        const zoom = z || usemap.getZoom();
-        const center = c || usemap.getCenter();
-        const data = d || {};
-        CefSharp.PostMessage(JSON.stringify({
-            action: action,
-            data: data,
-            zoom: zoom,
-            lat: center.lat,
-            lng: center.lng
-        }));
-    }
+
 
     const handleDragStart = () => {
         setIsDrag(true);
@@ -61,6 +97,9 @@ const MainMap = ({ children }) => {
         }))
     }
     const handleDragEnd = () => {
+        searchParam.set("z", center.zoom);
+        searchParam.set("center", `${center.lat},${center.lng}`);
+        setSearchParam(searchParam)
         setIsDrag(false);
     }
 
@@ -73,65 +112,56 @@ const MainMap = ({ children }) => {
             lon: lng,
             zoom
         });
-
-        const arr = res.display_name.split(",").reverse();
-        let address = "";
-        arr.forEach(function (str) {
-            str = str.trim();
-            if (str.match(/^ایران$/)) return;
-            if (str.match(/^\d{5}-\d{5}$/)) return;
-            if (str.match(/^استان .*$/)) return;
-            if (str.match(/^شهرستان .*$/)) return;
-            if (str.match(/^بخش .*$/)) return;
-            if (address !== '') address = address + '، ';
-            address = address + str;
-        });
         if (err) return;
-        if (res) Cef('point', {
-            zoom,
-            lat: res.lat,
-            lng: res.lon,
-            name: res.display_name,
-            address: address,
-            osm_type: res.osm_type
-        });
-        if (action.chooseOnMap) {
-            usemap.flyTo({ center: [lng, lat] });
-        }
-        if (action.isDirection, action.chooseOnMap) {
-            let arr = [...locations];
-            const handleUpdateLocation = () => {
-                return arr.map((item, idx) => {
-                    if (inputIndexSelected === idx) {
-                        return {
-                            color: randomColor(),
-                            value: res.display_name,
-                            location: res
+        if (res) {
+            Cef('point', {
+                zoom,
+                lat: res.lat,
+                lng: res.lon,
+                name: res.display_name,
+                address: AddressStringFilter(res.display_name),
+                osm_type: res.osm_type
+            });
+            if (action.chooseOnMap) {
+                usemap.flyTo({ center: [lng, lat] });
+            }
+            if (action.isDirection, action.chooseOnMap) {
+                let arr = [...locations];
+                const handleUpdateLocation = () => {
+                    return arr.map((item, idx) => {
+                        if (inputIndexSelected === idx) {
+                            return {
+                                ...item,
+                                value: res.display_name,
+                                location: res
+                            }
+                        } else {
+                            return item
                         }
-                    } else {
-                        return item
+                    })
+                }
+                dispatch(setLocations(handleUpdateLocation()));
+                dispatch(setActions({ chooseOnMap: false }))
+                dispatch(setLastLocation(res))
+            }
+            if (!action.isMarkerLocked) {
+                dispatch(setMarkers([
+                    {
+                        value: AddressStringFilter(res.display_name),
+                        location: res
                     }
-                })
+                ]))
             }
-            dispatch(setLocations(handleUpdateLocation()));
-            dispatch(setActions({ chooseOnMap: false }))
         }
-        dispatch(setMarkers([
-            {
-                value: address,
-                location: res
-            }
-        ]))
     }
-
     return (
         <div className="map-wrap">
             <Map
                 mapLib={maplibreGl}
                 initialViewState={{
-                    longitude: arrayMapCenter ? arrayMapCenter[1] : center.lng,
-                    latitude: arrayMapCenter ? arrayMapCenter[0] : center.lat,
-                    zoom: center.zoom
+                    longitude: qStringCenter ? qStringCenter[1] : center.lng,
+                    latitude: qStringCenter ? qStringCenter[0] : center.lat,
+                    zoom: searchParam.get("z") ? searchParam.get("z") : center.zoom // handle set zoom on url query string or default zoom
                 }}
                 onClick={(e) => handleClickMap(e)}
                 id="usemap"

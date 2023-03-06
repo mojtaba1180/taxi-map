@@ -1,23 +1,19 @@
 import axios from "axios";
-import env from '../../../env.json';
 
-
-const http = axios.create({
-  baseURL: env.VITE_MAP_API_URL,
+const OsrmApi = axios.create({
+  baseURL:import.meta.env.VITE_OSRM_URL,
 });
 
-http.interceptors.request.use(
+OsrmApi.interceptors.request.use(
   function (config) {
-      return{
-        ...config,
-      };
+      return config;
   },
   function (err) {
     return Promise.reject(err);
   }
 );
 
-http.interceptors.response.use(
+OsrmApi.interceptors.response.use(
   function (response) {
     return response.data;
   },
@@ -26,4 +22,4 @@ http.interceptors.response.use(
   }
 );
 
-export default http;
+export default OsrmApi;

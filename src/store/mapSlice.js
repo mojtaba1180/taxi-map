@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const centerEnv = import.meta.env.VITE_DEFAULT_CENTER
+
 const initialState = {
   centerData: {
-    lng: 51.33801773402661,
-    lat: 35.699864699856676,
-    zoom: 15,
+    lng: centerEnv ? centerEnv.split(",")[1] : 51.33801773402661,
+    lat: centerEnv ? centerEnv.split(",")[0] : 35.699864699856676,
+    zoom: 11,
     detail: {
       name: null,
       state: null,
@@ -18,7 +20,7 @@ const initialState = {
     onSearch: false, // handle search loading 
     isSetLocationByMarker: false,
     mobileSearch: false,
-    showSearchBar: false,
+    showSearchBar: true,
     showDirection: true,
     isMarkerLocked: false,
     isSearchBarCollapsed: false,
@@ -33,19 +35,24 @@ const initialState = {
     locations: [
       {
         value: "",
+        drag:true,
         location: {},
         color: ""
       }
       ,
       {
         value: "",
+        drag:true,
         location: {},
         color: ""
       }
     ]
   },
-  markers: {},
-
+  markers: [],
+  mapLastRequest:{ // updated in  any request from routing-api
+    lastLocation:null,
+    lastDirection:null
+  }
 };
 
 
@@ -126,6 +133,12 @@ export const counterSlice = createSlice({
     },
     setSearchBarCollapsed: (state, action) => {
       state.actions.isSearchBarCollapsed = action.payload
+    },
+    setLastLocation: (state, action) => { // set res last location after request api 
+      state.mapLastRequest.lastLocation = action.payload
+    },
+    setLastDirection: (state,action) => {  // set res last direction after request api 
+      state.mapLastRequest.lastDirection = action.payload
     }
   },
 });
@@ -147,7 +160,9 @@ export const { mapCenter,
   setMarkers,
   setMarkerLocked,
   setSearchBarCollapsed,
-  setActions
+  setActions,
+  setLastLocation,
+  setLastDirection
 } = counterSlice.actions;
 
 
@@ -170,5 +185,7 @@ export const selectSearchResult = (state) => state.mapStore.search.searchResult
 export const selectLocations = (state) => state.mapStore.locations
 
 export const selectMarkers = (state) => state.mapStore.markers
+
+export const selectMapLastRequest = (state) => state.mapStore.mapLastRequest
 
 export default counterSlice.reducer;

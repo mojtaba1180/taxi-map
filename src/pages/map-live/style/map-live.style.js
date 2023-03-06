@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { GrayDark, GrayLight, Primary, radius_lg, radius_sm, Secondary } from '../../../utils/variables';
 
-export const MapOrderContainer = styled.div`
+export const MapLiveContainer = styled.div`
 
 `;
 
-export const MapOrderRightBox = styled.div`
+export const MapLiveRightBox = styled.div`
     position: absolute;
     top: 1em;
     right: 1em;
@@ -17,7 +17,7 @@ export const MapOrderRightBox = styled.div`
     padding: 1em;
 `;
 
-export const MapOrderRightBoxTitle = styled.p`
+export const MapLiveRightBoxTitle = styled.p`
     margin: auto;
     margin-bottom: 10px;
     padding: 0 0;
@@ -26,7 +26,7 @@ export const MapOrderRightBoxTitle = styled.p`
 `;
 
 
-export const MapOrderSearch = styled.div`
+export const MapLiveSearch = styled.div`
     width: 100%;
     height: 3em;
     background-color: ${GrayLight};
@@ -54,7 +54,7 @@ export const MapOrderSearch = styled.div`
     }
     
 `;
-export const MapOrderSearchInput = styled.input`
+export const MapLiveSearchInput = styled.input`
     position: absolute;
     left: 5px;
     width: 96%;
@@ -66,13 +66,14 @@ export const MapOrderSearchInput = styled.input`
     outline: none;
     font-size: 15px;
 `;
-export const MapOrderList = styled.ul`
+export const MapLiveList = styled.ul`
     list-style: none;
     padding: 1em 0;
 `;
 
-export const MapOrderListItem = styled.li`
-    background-color: ${GrayLight};
+export const MapLiveListItem = styled.li`
+    background-color:  ${props => props.active ? Primary : GrayLight};
+    color: ${props => props.active ? "#fff" : "#000" };
     margin-bottom: 10px;
     padding: 1em 10px;
     border-radius: ${radius_sm};
@@ -87,11 +88,13 @@ export const MapOrderListItem = styled.li`
     border: 1px solid ${Secondary};
     &:hover {
         background-color: #fff;
+        color:#000
     }
     & .icon {
        border-radius: 100px;
         width: 50px;
         background-color: #fff;
+        color: ${props => props.active ? "#fff" : "#000" };
     }
     &:hover .icon {
         background-color: ${Primary};
@@ -99,11 +102,11 @@ export const MapOrderListItem = styled.li`
         color: #fff;
     }
 `;
-export const MapOrderListItemTitle =  styled.span`
-    font-size: 1em;
+export const MapLiveListItemTitle =  styled.span`
+    font-size: 1.3em;
     margin: 0;
 `;
-export const MapOrderListItemContent =  styled.p`
+export const MapLiveListItemContent =  styled.p`
     font-size: 15px;
     margin: 0;
 `;

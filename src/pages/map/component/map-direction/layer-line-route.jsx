@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import { Layer, Source } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { RoutingApi } from '../../../../apis/routing-api';
-import { addCoordinates, selectCoordinates, selectLocations } from '../../../../store/mapSlice';
+import { addCoordinates, selectCoordinates, selectLocations, setLastDirection } from '../../../../store/mapSlice';
 const LayerLineRoute = () => {
     const coordinates = useSelector(selectCoordinates);
     const locations = useSelector(selectLocations);
     const dispatch = useDispatch();
-
 
     // check location 
     const locationsReady = async () => {
@@ -31,6 +30,7 @@ const LayerLineRoute = () => {
                 });
                 if (err) console.log(err);
                 if (res) {
+                    dispatch(setLastDirection(res));
                     res.routes.map(item => {
                         dispatch(addCoordinates(item.geometry.coordinates))
                     })

@@ -1,6 +1,5 @@
 import { List, ThemeIcon } from '@mantine/core';
 import { IconCurrentLocation } from '@tabler/icons';
-import randomColor from 'randomcolor';
 import { useMap } from 'react-map-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAction, selectLocations, selectSearchResult, setLocations, setSearchResult } from '../../../../store/mapSlice';
@@ -14,15 +13,15 @@ const MapSearchResult = () => {
   const dispatch = useDispatch();
 
   const handleSetLocation = (loc, item, index) => {
-
+    console.log(loc)
     let arr = [...loc]
     if (index !== null && !action.isDrag) {
       return arr.map((i, idx) => {
         if (idx === index) {
           return {
+            drag: true,
             value: item.display_name,
             location: item,
-            color: randomColor()
           }
         } else {
           return i
@@ -42,7 +41,7 @@ const MapSearchResult = () => {
         handleSetLocation(locationsSelector.locations, item, locationsSelector.inputIndexSelected)
       ))
     }
-    usemap.flyTo({ center: [lon, lat] })
+    usemap.flyTo({ center: [lon, lat] });
   }
 
 

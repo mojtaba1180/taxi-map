@@ -1,0 +1,21 @@
+.map-live-marker{
+    transform: translateY(0%);
+    position: relative;
+
+}
+.map-live-marker-first,.map-live-marker-last{
+    width: 10px;
+    height:10px;
+    /* box-shadow: 0 4px 10px -3px #999; */
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+    border-radius: 10px;
+    z-index: 1;
+}
+.map-live-marker span{
+    width: 10px ;
+    height: 10px;
+    border-radius: 10px;
+}

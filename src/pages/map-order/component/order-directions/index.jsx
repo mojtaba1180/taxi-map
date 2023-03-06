@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Layer, Source, useMap } from 'react-map-gl';
+import { useMap } from 'react-map-gl';
 import { useLocation } from 'react-router-dom';
 import { RoutingApi } from '../../../../apis/routing-api';
+import DirectionLine from '../../../../components/direction-line';
 import MapOrderQuery from '../../map-order-query';
 import DirectionPoint from './direction-point';
 const OrderDirections = () => {
@@ -16,13 +17,13 @@ const OrderDirections = () => {
         const { res, err } = await RoutingApi.getOrderLocations(query);
         if (res) {
             const arr = res.locations.map(item => {
-                return [item.lat, item.lng];
+                return [item.lng, item.lat];
             })
             setLocations(res.locations);
             setCoordinates(arr);
 
             // console.log(usemap.isStyleLoaded())
-            usemap.flyTo({ center: [arr[0][1], arr[0][0]] })
+            usemap.flyTo({ center: [arr[0][0], arr[0][1]] })
 
         }
     }
@@ -34,45 +35,22 @@ const OrderDirections = () => {
         }
     }, [])
 
-    let GeoJson = {
-        type: 'FeatureCollection',
-        features: [
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString',
-                    coordinates: coordinates
-                }
-            }
-        ]
-    };
-
     return (
         <>
-
-            <Source
-                id="my-data" type="geojson" data={GeoJson}>
-                <Layer
-                    id="lineLayer"
-                    type="line"
-                    source="my-data"
-                    layout={{
-                        "line-join": "round",
-                        "line-cap": "round"
-                    }}
-                    paint={{
-                        "line-color": "#0008ff",
-                        "line-width": 5
-                    }}
-                />
-            </Source>
             {
-                locations && locations?.map((item, idx) => {
-                    return (
-                        <DirectionPoint {...item} key={idx} />
-                    )
-                })
+                locations &&
+                <DirectionLine coordinates={coordinates} >
+                    {
+                        locations?.map((item, idx) => {
+                            return (
+                                <DirectionPoint {...item} index={idx} startIndex={0} endIndex={locations.length - 1} key={idx} />
+                            )
+                        })
+                    }
+                </DirectionLine>
+
             }
+
         </>
     )
 }

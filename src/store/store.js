@@ -3,6 +3,6 @@ import mapReducer from './mapSlice';
 
 export const store = configureStore({
   reducer: {
-    mapStore: mapReducer,
+    mapStore: mapReducer
   },
 });

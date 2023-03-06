@@ -1,23 +1,22 @@
 import axios from "axios";
-import env from '../../../env.json';
 
-const mainHttp = axios.create({
-  baseURL: env.VITE_MAIN_API_URL,
+
+const NomiApi = axios.create({
+  baseURL: import.meta.env.VITE_NOMINATIM_URL,
 });
 
-mainHttp.interceptors.request.use(
+NomiApi.interceptors.request.use(
   function (config) {
       return{
         ...config,
       };
-
   },
   function (err) {
     return Promise.reject(err);
   }
 );
 
-mainHttp.interceptors.response.use(
+NomiApi.interceptors.response.use(
   function (response) {
     return response.data;
   },
@@ -26,4 +25,4 @@ mainHttp.interceptors.response.use(
   }
 );
 
-export default mainHttp;
+export default NomiApi;

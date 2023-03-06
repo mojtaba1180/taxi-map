@@ -1,95 +1,100 @@
 import qs from 'qs';
-import { randomColor } from 'randomcolor';
 import { RoutingApi } from '../../apis/routing-api';
-import { addCoordinates, mapCenter, setIsDirection, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
-const MapQuery = ({ search, dispatch }) => {
-
+import { NumToBol } from '../../helpers/handleNumToBol';
+import { addCoordinates, setIsDirection, setLastDirection, setLastLocation, setLocations, setLocationsRoutedType, setMarkerLocked, setMarkers, setSearchBarCollapsed, setShowDirection, setShowSearchBar } from '../../store/mapSlice';
+import { Primary } from '../../utils/variables';
+const MapQuery = ({ search, dispatch, center }) => {
     const query = qs.parse(search.split("?")[1]);
     const parse = (q) => JSON.parse(q)
     if (query.showDirection) dispatch(setShowDirection(parse(query.showDirection)));
     if (query.showSearchBar) dispatch(setShowSearchBar(parse(query.showSearchBar)));
-    if (query.loc) handleLoc(query.loc, dispatch);
+    if (query.loc) handleLoc(query.loc, dispatch, center);
+
     //query.center center mode query handler in file components/main-map/main-map.jsx 
-    if (query.z) handleZoom(query.z, dispatch);
+    //query.z center mode query handler in file components/main-map/main-map.jsx 
+
     if (query.type) handleType(query.type, dispatch);
-    if (query.markers) handleMarkers(query.markers, dispatch);
+    if (query.marker) handleMarker(query, dispatch);
     if (query.marker_locked) handleMarkerLocked(parse(query.marker_locked), dispatch);
     if (query.collapsed) handleCollapsed(parse(query.collapsed), dispatch);
-
 }
-
 // handle set direction locations and set route direction line
-const handleLoc = async (loc, dispatch) => {
-    const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => Number(i)))
+const handleLoc = async (loc, dispatch, center) => {
+    const ArrayLocations = loc.split(";").map(item => item.split(",").map(i => i));
     let resultLocation = Promise.all(
-        ArrayLocations.map(async (location) => {
+        ArrayLocations.map(async (location, idx) => {
             const { res, err } = await RoutingApi.getLocation({
                 lat: location[0],
                 lon: location[1],
                 zoom: 18
             })
-            return {
-                color: randomColor(),
-                value: res.display_name,
-                location: res
-            }}))
+
+         
+            if (res) {
+                dispatch(setLastLocation(res)); //set changes in global state after request 
+                let lat_lon = "";
+                await loc.split(";").map(item => lat_lon = `${lat_lon}${item.split(",")[0]},${item.split(",")[1]};`);
+                const Direction = await RoutingApi.getRoutingDirection({
+                    lat_lon: lat_lon.slice(";", -1)
+                });
+                if (Direction.err) console.log(err);
+                if (Direction.res) {
+                    Direction.res.routes.map(item => {
+                        dispatch(addCoordinates(item.geometry.coordinates));
+                        dispatch(setLastDirection(Direction.res)); //set changes in global state after request 
+                    })
+                }
+                return {
+                    color: (idx === ArrayLocations.length - 1) ? "#00ff33" : Primary,
+                    value: location[3] ? location[3] : res.display_name,
+                    drag: location[2] ? NumToBol(location[2]) : null,
+                    location: res
+                }
+            }
+        }))
 
     await resultLocation.then(res => {
         dispatch(setIsDirection(true))
         dispatch(setLocations(res));
     })
+}
 
-    const { res, err } = await RoutingApi.getRoutingDirection({
-        lat_lon: loc
-    });
-    if (err) console.log(err);
-    if (res) {
-        res.routes.map(item => {
-            dispatch(addCoordinates(item.geometry.coordinates))
-        })
-    }
-}
-// handle set zoom map 
-const handleZoom = (z, dispatch) => {
-    dispatch(mapCenter({
-        zoom:z
-    }))
-}
 // handle set direction type
 const handleType = (type, dispatch) => {
-    if(type === "car"|| type === "bike" || type === "foot"){
+    if (type === "car" || type === "bike" || type === "foot") {
         dispatch(setLocationsRoutedType(type))
     }
 }
 
-const handleMarkers = async (markers , dispatch) => {
-   const ArrayMarkers = markers.split(";").map(item => item.split(",").map(i => Number(i)))
-    let resultMarkers = Promise.all(
-        ArrayMarkers.map(async (marker) => {
-            const { res, err } = await RoutingApi.getLocation({
-                lat: marker[0],
-                lon: marker[1],
-                zoom: 18
-            })
-            return {
-                color: randomColor(),
-                value: res.display_name,
-                location: res
-            }
-        })
-    )
-
-    await resultMarkers.then(res => {
-        dispatch(setMarkers(res));
+const handleMarker = async (query, dispatch) => {
+    console.log(query.marker)
+    const marker = query.marker.split(",").map(i => Number(i))
+    const { res, err } = await RoutingApi.getLocation({
+        lat: marker[0],
+        lon: marker[1],
+        zoom: 18
     })
+    if (res) {
+        await dispatch(setMarkers([
+            {
+                value: query.marker_name ? query.marker_name : res?.display_name,
+
+                location: res,
+            }
+        ]));
+        dispatch(setLastLocation(res))
+    } else {
+        dispatch(setMarkers({}))
+    }
 }
 
-const handleMarkerLocked = (marker_locked, dispatch) =>{
-    if(marker_locked === true || marker_locked === false){ dispatch(setMarkerLocked(marker_locked));}
+const handleMarkerLocked = (m, dispatch) => {
+    dispatch(setMarkerLocked(NumToBol(m)));
 }
 
-const handleCollapsed = (collapsed , dispatch) => {
-    if(collapsed === true || collapsed === false) dispatch(setSearchBarCollapsed(collapsed));
+const handleCollapsed = (collapsed, dispatch) => {
+    dispatch(setSearchBarCollapsed(NumToBol(collapsed)));
+    dispatch(setIsDirection(false));
 }
 
 export default MapQuery

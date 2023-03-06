@@ -6,20 +6,37 @@ interface Prop {
     isDrag: boolean,
     centerMode: boolean,
     title: any,
-    color?: String
+    color?: String,
+    popup?:boolean,
+    index?:number,
+    currentPopupOpen?:number
 }
-const LocationMarker = ({ isDrag, centerMode, title, color= "#000" }: Prop) => {
-    const [open, setOpen] = React.useState(false);
+const LocationMarker = ({ isDrag, centerMode, title, color= "#000",popup,index,currentPopupOpen }: Prop) => {
+
+    const [open, setOpen] = React.useState(popup);
+    React.useEffect(() => {
+        if(index !== null || index !== undefined){
+            if(index === currentPopupOpen){
+                setOpen(true)
+            }else{
+                setOpen(false)
+            }
+        }
+    },[currentPopupOpen])
     return (
 
         <div className={`${!centerMode && "marker-container" }`} >
 
             <Popover width={200} position="top" opened={open} withArrow shadow="md">
-                <Popover.Dropdown>
-                    <div className='marker-popup' >
-                        {title}
-                    </div>
-                </Popover.Dropdown>
+              {
+                !centerMode && (
+                    <Popover.Dropdown>
+                        <div className='marker-popup' >
+                            {title}
+                        </div>
+                    </Popover.Dropdown>
+                )
+              }
                 <Popover.Target>
                     <div>
                         <svg onClick={() => setOpen(!open)} xmlns="http://www.w3.org/2000/svg" className={`${centerMode ? "marker-center" : "marker"}`} style={{ marginTop: isDrag ? "-20" : 0 }} viewBox="0 0 38 58">
